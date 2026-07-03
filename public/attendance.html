@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Attendance | CDLU ERP</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .att-grid { display: grid; gap: 20px; }
+    .att-controls { display: flex; gap: 15px; flex-wrap: wrap; align-items: end; }
+    .att-controls .form-group { flex: 1; min-width: 150px; }
+    .att-table { width: 100%; border-collapse: collapse; }
+    .att-table th { background: var(--navy); color: white; padding: 10px; text-align: left; font-size: 13px; }
+    .att-table td { padding: 8px 10px; border-bottom: 1px solid #eee; }
+    .att-table tr:hover { background: #f9f9f9; }
+    .status-badge { padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; }
+    .status-present { background: #e8f5e9; color: #138808; }
+    .status-absent { background: #fce4e4; color: #c0392b; }
+    .status-late { background: #fff3e0; color: #e65100; }
+    .status-leave { background: #e3f2fd; color: #1565c0; }
+    .att-report { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
+  </style>
+</head>
+<body>
+  <div class="top-bar"><div class="container"><span>Shraddhavan Labhate Gyanam</span><span><a href="dashboard.html">Back to Dashboard</a></span></div></div>
+  <header class="header"><div class="container"><a href="index.html" class="logo"><div class="logo-icon">CDLU</div><div class="logo-text"><h1>Chaudhary Devi Lal University</h1><span>Attendance Management</span></div></a></div></header>
+  <section class="section"><div class="container">
+    <h2 style="color:var(--navy);margin-bottom:20px">Mark Attendance</h2>
+    <div class="att-controls">
+      <div class="form-group"><label>Select Course</label><select id="attCourse" class="form-input"><option value="">-- Select --</option></select></div>
+      <div class="form-group"><label>Date</label><input type="date" id="attDate" class="form-input"></div>
+      <div class="form-group"><label>Semester</label><select id="attSemester" class="form-input"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option></select></div>
+      <button class="btn btn-primary" onclick="loadAttendance()">Load</button>
+    </div>
+    <div style="margin:20px 0;overflow-x:auto">
+      <table class="att-table" id="attTable"><thead><tr><th>#</th><th>Student</th><th>Reg ID</th><th>Status</th></tr></thead><tbody id="attBody"></tbody></table>
+    </div>
+    <p id="attNoData" style="text-align:center;padding:30px;color:#999;display:none">Select course and date to load students.</p>
+    <div style="text-align:center;margin-top:15px;display:none" id="attSaveRow">
+      <button class="btn btn-primary" onclick="saveAttendance()">Save Attendance</button>
+    </div>
+  </div></section>
+  <footer class="footer"><div class="container"><div class="footer-bottom"><p>&copy; 2026 CDLU Sirsa</p></div></div></footer>
+  <script src="js/api.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      document.getElementById('attDate').valueAsDate = new Date();
+      API.get('/courses').then(function(courses) {
+        var sel = document.getElementById('attCourse');
+        courses.forEach(function(c) {
+          var opt = document.createElement('option');
+          opt.value = c.id; opt.textContent = c.code + ' - ' + c.name;
+          sel.appendChild(opt);
+        });
+      });
+    });
+
+    async function loadAttendance() {
+      var courseId = document.getElementById('attCourse').value;
+      var date = document.getElementById('attDate').value;
+      if (!courseId || !date) { alert('Select course and date'); return; }
+      var students = await API.get('/students');
+      var existing = await API.get('/attendance?courseId=' + courseId + '&date=' + date);
+      var tbody = document.getElementById('attBody');
+      tbody.innerHTML = '';
+      document.getElementById('attNoData').style.display = 'none';
+      document.getElementById('attSaveRow').style.display = 'block';
+      students.forEach(function(s, i) {
+        var att = existing.find(function(e) { return e.student_id === s.id; });
+        var status = att ? att.status : 'present';
+        var tr = document.createElement('tr');
+        tr.innerHTML = '<td>' + (i+1) + '</td><td>' + s.name + '</td><td>' + s.reg_id + '</td>' +
+          '<td><select class="att-status" data-student="' + s.id + '" style="padding:5px;border:1px solid #ccc;border-radius:4px">' +
+          '<option value="present"' + (status==='present'?' selected':'') + '>Present</option>' +
+          '<option value="absent"' + (status==='absent'?' selected':'') + '>Absent</option>' +
+          '<option value="late"' + (status==='late'?' selected':'') + '>Late</option>' +
+          '<option value="leave"' + (status==='leave'?' selected':'') + '>Leave</option>' +
+          '</select></td>';
+        tbody.appendChild(tr);
+      });
+    }
+
+    async function saveAttendance() {
+      var courseId = document.getElementById('attCourse').value;
+      var date = document.getElementById('attDate').value;
+      var semester = document.getElementById('attSemester').value;
+      var statusSelects = document.querySelectorAll('.att-status');
+      var records = [];
+      statusSelects.forEach(function(sel) {
+        records.push({
+          student_id: parseInt(sel.dataset.student),
+          course_id: parseInt(courseId),
+          date: date,
+          status: sel.value,
+          semester: parseInt(semester)
+        });
+      });
+      var result = await API.post('/attendance/batch', { records: records });
+      if (result.success) {
+        alert('Attendance saved: ' + result.inserted + ' records');
+      } else {
+        alert('Error saving attendance');
+      }
+    }
+  </script>
+</body>
+</html>

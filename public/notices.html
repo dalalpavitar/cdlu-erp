@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notices | CDLU ERP</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .notice-card { background: white; padding: 20px; border-radius: 8px; margin-bottom: 15px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); border-left: 4px solid var(--saffron); }
+    .notice-card.urgent { border-left-color: #c0392b; }
+    .notice-card.important { border-left-color: #e65100; }
+    .notice-title { font-size: 1.1rem; font-weight: 600; color: var(--navy); margin-bottom: 5px; }
+    .notice-meta { font-size: 0.8rem; color: #999; margin-bottom: 10px; }
+    .notice-content { color: #555; line-height: 1.6; }
+    .notice-form { background: white; padding: 25px; border-radius: 8px; margin-bottom: 30px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+    .notice-form textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; resize: vertical; font-family: inherit; }
+    .notice-form .form-row { display: flex; gap: 15px; flex-wrap: wrap; }
+    .notice-form .form-row .form-group { flex: 1; min-width: 150px; }
+    .tag { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 600; }
+    .tag-urgent { background: #fce4e4; color: #c0392b; }
+    .tag-important { background: #fff3e0; color: #e65100; }
+    .tag-normal { background: #e8f5e9; color: #138808; }
+  </style>
+</head>
+<body>
+  <div class="top-bar"><div class="container"><span>Shraddhavan Labhate Gyanam</span><span><a href="dashboard.html">Back to Dashboard</a></span></div></div>
+  <header class="header"><div class="container"><a href="index.html" class="logo"><div class="logo-icon">CDLU</div><div class="logo-text"><h1>Chaudhary Devi Lal University</h1><span>Notice Board</span></div></a></div></header>
+  <section class="section"><div class="container">
+    <h2 style="color:var(--navy);margin-bottom:20px">Notice Board</h2>
+
+    <div class="notice-form" id="noticeForm">
+      <h4 style="margin-bottom:10px;color:var(--navy)">Post New Notice</h4>
+      <div class="form-group"><label>Title *</label><input type="text" id="noticeTitle" class="form-input" placeholder="Enter notice title"></div>
+      <div class="form-group"><label>Content</label><textarea id="noticeContent" rows="3" placeholder="Enter notice content"></textarea></div>
+      <div class="form-row">
+        <div class="form-group"><label>Priority</label><select id="noticePriority" class="form-input"><option value="normal">Normal</option><option value="important">Important</option><option value="urgent">Urgent</option></select></div>
+        <div class="form-group"><label>Target Audience</label><select id="noticeTarget" class="form-input"><option value="all">All</option><option value="students">Students Only</option><option value="teachers">Teachers Only</option></select></div>
+      </div>
+      <button class="btn btn-primary" onclick="postNotice()">Post Notice</button>
+    </div>
+
+    <div id="noticesList"></div>
+    <p id="noticeNoData" style="text-align:center;padding:30px;color:#999;display:none">No notices posted yet.</p>
+  </div></section>
+
+  <footer class="footer"><div class="container"><div class="footer-bottom"><p>&copy; 2026 CDLU Sirsa</p></div></div></footer>
+  <script src="js/api.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', loadNotices);
+
+    async function loadNotices() {
+      var notices = await API.get('/notices');
+      var list = document.getElementById('noticesList');
+      list.innerHTML = '';
+      if (notices.length === 0) { document.getElementById('noticeNoData').style.display = 'block'; return; }
+      document.getElementById('noticeNoData').style.display = 'none';
+      notices.forEach(function(n) {
+        var card = document.createElement('div');
+        card.className = 'notice-card ' + (n.priority === 'urgent' ? 'urgent' : (n.priority === 'important' ? 'important' : ''));
+        card.innerHTML = '<div class="notice-title">' + n.title + ' <span class="tag tag-' + n.priority + '">' + n.priority + '</span></div>' +
+          '<div class="notice-meta">Posted by ' + (n.posted_by_name || 'Admin') + ' | ' + new Date(n.created_at).toLocaleString('en-IN') + ' | For: ' + n.target + '</div>' +
+          (n.content ? '<div class="notice-content">' + n.content + '</div>' : '');
+        list.appendChild(card);
+      });
+    }
+
+    async function postNotice() {
+      var title = document.getElementById('noticeTitle').value.trim();
+      var content = document.getElementById('noticeContent').value.trim();
+      if (!title) { alert('Title is required'); return; }
+      var result = await API.post('/notices', {
+        title: title,
+        content: content,
+        priority: document.getElementById('noticePriority').value,
+        target: document.getElementById('noticeTarget').value
+      });
+      if (result.success) {
+        document.getElementById('noticeTitle').value = '';
+        document.getElementById('noticeContent').value = '';
+        loadNotices();
+      } else {
+        alert('Error: ' + (result.error || 'Failed'));
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel | CDLU Sirsa</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div class="top-bar">
+    <div class="container">
+      <span>Shraddhavan Labhate Gyanam | श्रद्धावान लभते ज्ञानं</span>
+      <span><a href="index.html">Back to Website</a></span>
+    </div>
+  </div>
+
+  <header class="header">
+    <div class="container">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">CDLU</div>
+        <div class="logo-text">
+          <h1>Chaudhary Devi Lal University</h1>
+          <span>Admin Panel - Student Registration Dashboard</span>
+        </div>
+      </a>
+      <nav class="nav">
+        <a href="index.html">Home</a>
+        <a href="registration.html">Registration</a>
+        <a href="dashboard.html">★ ERP</a>
+        <a href="admin.html" class="active">Admin</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="page-banner">
+    <div class="container">
+      <h1>Admin Dashboard</h1>
+      <p>View and manage student registrations</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+
+      <div id="loginBox" class="admin-login">
+        <div class="admin-login-card">
+          <span style="font-size:3rem;display:block;text-align:center;margin-bottom:10px">&#128274;</span>
+          <h3 style="text-align:center;color:var(--navy);margin-bottom:15px">Admin Login</h3>
+          <div class="form-group">
+            <input type="password" id="adminPass" placeholder="Enter admin password">
+          </div>
+          <button class="btn btn-primary" style="width:100%" onclick="adminLogin()">Login</button>
+          <p style="text-align:center;margin-top:10px;font-size:0.8rem;color:var(--text-light)">Default password: <strong>cdlu@2026</strong></p>
+        </div>
+      </div>
+
+      <div id="adminPanel" class="admin-panel" style="display:none">
+        <div class="admin-stats-bar">
+          <div class="admin-stat-card">
+            <span class="admin-stat-num" id="totalCount">0</span>
+            <span>Total Registrations</span>
+          </div>
+          <div class="admin-stat-card">
+            <span class="admin-stat-num" id="todayCount">0</span>
+            <span>Today's Registrations</span>
+          </div>
+          <div class="admin-stat-card">
+            <span class="admin-stat-num" id="pendingCount">0</span>
+            <span>Total Students</span>
+          </div>
+        </div>
+
+        <div class="admin-toolbar">
+          <input type="text" id="searchInput" placeholder="Search by name, phone or ID..." onkeyup="filterRegistrations()">
+          <div class="admin-toolbar-btns">
+            <button class="btn btn-primary" onclick="exportCSV()">Download CSV</button>
+            <button class="btn btn-primary" onclick="exportJSON()">Download JSON</button>
+            <button class="btn btn-primary" onclick="printReport()" style="background:var(--navy);color:var(--white)">Print Report</button>
+            <button class="btn btn-primary" onclick="clearAllData()" style="background:#c0392b;color:var(--white)">Clear All</button>
+            <button class="btn btn-primary" onclick="adminLogout()" style="background:#666">Logout</button>
+          </div>
+        </div>
+
+        <div style="overflow-x:auto">
+          <table class="admin-table" id="regTable">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Reg ID</th>
+                <th>Name</th>
+                <th>Father's Name</th>
+                <th>DOB</th>
+                <th>Gender</th>
+                <th>Category</th>
+                <th>Phone</th>
+                <th>Email</th>
+                <th>Programme</th>
+                <th>Qualification</th>
+                <th>Percentage</th>
+                <th>Registered On</th>
+              </tr>
+            </thead>
+            <tbody id="regBody"></tbody>
+          </table>
+        </div>
+
+        <p id="noDataMsg" style="text-align:center;padding:40px;color:var(--text-light);display:none">No registrations found.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-about">
+          <h3><span class="logo-icon" style="width:36px;height:36px;font-size:0.55rem;">CDLU</span> Chaudhary Devi Lal University</h3>
+          <p>Admin Panel for managing student registrations.</p>
+        </div>
+        <div>
+          <h4>Quick Links</h4>
+          <ul class="footer-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="registration.html">Registration</a></li>
+            <li><a href="admin.html">Admin Panel</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Contact</h4>
+          <ul class="footer-links">
+            <li>Barnala Road, Sirsa</li>
+            <li>Haryana - 125055, India</li>
+            <li>01666-247049</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Chaudhary Devi Lal University, Sirsa. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/script.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

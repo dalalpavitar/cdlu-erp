@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Results | CDLU ERP</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .res-controls { display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 25px; align-items: end; }
+    .res-table { width: 100%; border-collapse: collapse; }
+    .res-table th { background: var(--navy); color: white; padding: 10px; text-align: left; font-size: 13px; }
+    .res-table td { padding: 8px 10px; border-bottom: 1px solid #eee; }
+    .grade-A, .grade-AP { color: #138808; font-weight: 700; }
+    .grade-B { color: #2e7d32; font-weight: 600; }
+    .grade-C { color: #e65100; font-weight: 600; }
+    .grade-D { color: #c0392b; font-weight: 600; }
+    .grade-F { color: #b71c1c; font-weight: 700; }
+  </style>
+</head>
+<body>
+  <div class="top-bar"><div class="container"><span>Shraddhavan Labhate Gyanam</span><span><a href="dashboard.html">Back to Dashboard</a></span></div></div>
+  <header class="header"><div class="container"><a href="index.html" class="logo"><div class="logo-icon">CDLU</div><div class="logo-text"><h1>Chaudhary Devi Lal University</h1><span>Results Management</span></div></a></div></header>
+  <section class="section"><div class="container">
+    <h2 style="color:var(--navy);margin-bottom:20px">Enter Marks / Results</h2>
+    <div class="res-controls">
+      <div class="form-group"><label>Course</label><select id="resCourse" class="form-input"><option value="">-- Select --</option></select></div>
+      <div class="form-group"><label>Semester</label><select id="resSemester" class="form-input"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option></select></div>
+      <div class="form-group"><label>Exam Type</label><select id="resExamType" class="form-input"><option value="midterm">Midterm</option><option value="final">Final</option><option value="practical">Practical</option></select></div>
+      <button class="btn btn-primary" onclick="loadResultStudents()">Load</button>
+    </div>
+    <div style="overflow-x:auto">
+      <table class="res-table"><thead><tr><th>#</th><th>Student</th><th>Reg ID</th><th>Marks</th><th>Max Marks</th><th>Grade</th><th>Action</th></tr></thead><tbody id="resBody"></tbody></table>
+    </div>
+    <p id="resNoData" style="text-align:center;padding:30px;color:#999;display:none">Select course and click Load.</p>
+  </div></section>
+  <footer class="footer"><div class="container"><div class="footer-bottom"><p>&copy; 2026 CDLU Sirsa</p></div></div></footer>
+  <script src="js/api.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      API.get('/courses').then(function(courses) {
+        var sel = document.getElementById('resCourse');
+        courses.forEach(function(c) {
+          var opt = document.createElement('option');
+          opt.value = c.id; opt.textContent = c.code + ' - ' + c.name;
+          sel.appendChild(opt);
+        });
+      });
+    });
+
+    async function loadResultStudents() {
+      var courseId = document.getElementById('resCourse').value;
+      var semester = document.getElementById('resSemester').value;
+      var examType = document.getElementById('resExamType').value;
+      if (!courseId) { alert('Select course'); return; }
+      var students = await API.get('/students?semester=' + semester + '&status=active');
+      var existingResults = await API.get('/results?courseId=' + courseId + '&semester=' + semester + '&examType=' + examType);
+      var tbody = document.getElementById('resBody');
+      tbody.innerHTML = '';
+      document.getElementById('resNoData').style.display = 'none';
+      if (students.length === 0) { document.getElementById('resNoData').style.display = 'block'; return; }
+      students.forEach(function(s, i) {
+        var existing = existingResults.find(function(r) { return r.student_id === s.id; });
+        var marks = existing ? existing.marks_obtained : '';
+        var maxM = existing ? existing.max_marks : 100;
+        var grade = existing ? existing.grade : '-';
+        var tr = document.createElement('tr');
+        tr.innerHTML = '<td>' + (i+1) + '</td><td>' + s.name + '</td><td>' + s.reg_id + '</td>' +
+          '<td><input type="number" class="marks-input" data-student="' + s.id + '" value="' + marks + '" min="0" max="100" style="width:70px;padding:5px;border:1px solid #ccc;border-radius:4px"></td>' +
+          '<td><input type="number" class="max-input" data-student="' + s.id + '" value="' + maxM + '" min="1" style="width:70px;padding:5px;border:1px solid #ccc;border-radius:4px"></td>' +
+          '<td class="grade-' + (grade ? grade.charAt(0) : '') + '" id="grade_' + s.id + '">' + grade + '</td>' +
+          '<td><button onclick="saveResult(' + s.id + ')" style="padding:4px 12px;background:var(--saffron);color:white;border:none;border-radius:4px;cursor:pointer">Save</button></td>';
+        tbody.appendChild(tr);
+      });
+    }
+
+    async function saveResult(studentId) {
+      var courseId = document.getElementById('resCourse').value;
+      var semester = document.getElementById('resSemester').value;
+      var examType = document.getElementById('resExamType').value;
+      var marksInput = document.querySelector('.marks-input[data-student="' + studentId + '"]');
+      var maxInput = document.querySelector('.max-input[data-student="' + studentId + '"]');
+      if (!marksInput || marksInput.value === '') { alert('Enter marks'); return; }
+      var result = await API.post('/results', {
+        studentId: studentId,
+        courseId: parseInt(courseId),
+        semester: parseInt(semester),
+        examType: examType,
+        marksObtained: parseFloat(marksInput.value),
+        maxMarks: parseFloat(maxInput ? maxInput.value : 100)
+      });
+      if (result.success) {
+        document.getElementById('grade_' + studentId).textContent = result.grade;
+        alert('Saved! Grade: ' + result.grade);
+      } else {
+        alert('Error: ' + (result.error || 'Failed'));
+      }
+    }
+  </script>
+</body>
+</html>

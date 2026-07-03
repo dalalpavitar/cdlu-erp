@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Timetable | CDLU ERP</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .tt-controls { display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 20px; align-items: end; }
+    .tt-grid { width: 100%; border-collapse: collapse; }
+    .tt-grid th { background: var(--navy); color: white; padding: 12px 8px; text-align: center; font-size: 13px; }
+    .tt-grid td { border: 1px solid #ddd; padding: 8px; vertical-align: top; height: 100px; width: 14.28%; font-size: 12px; }
+    .tt-grid .time-slot { background: #f5f5f5; font-weight: 600; width: 80px; }
+    .tt-entry { background: #e8f5e9; padding: 4px 6px; margin: 2px 0; border-radius: 3px; border-left: 3px solid #138808; font-size: 11px; }
+  </style>
+</head>
+<body>
+  <div class="top-bar"><div class="container"><span>Shraddhavan Labhate Gyanam</span><span><a href="dashboard.html">Back to Dashboard</a></span></div></div>
+  <header class="header"><div class="container"><a href="index.html" class="logo"><div class="logo-icon">CDLU</div><div class="logo-text"><h1>Chaudhary Devi Lal University</h1><span>Timetable</span></div></a></div></header>
+  <section class="section"><div class="container">
+    <h2 style="color:var(--navy);margin-bottom:20px">Class Timetable</h2>
+    <div class="tt-controls">
+      <div class="form-group"><label>Semester</label><select id="ttSemester" class="form-input" onchange="loadTimetable()"><option value="">All</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option></select></div>
+    </div>
+    <div style="overflow-x:auto">
+      <table class="tt-grid" id="ttGrid">
+        <thead><tr><th>Time</th><th>Monday</th><th>Tuesday</th><th>Wednesday</th><th>Thursday</th><th>Friday</th><th>Saturday</th></tr></thead>
+        <tbody id="ttBody"></tbody>
+      </table>
+    </div>
+  </div></section>
+
+  <footer class="footer"><div class="container"><div class="footer-bottom"><p>&copy; 2026 CDLU Sirsa</p></div></div></footer>
+  <script src="js/api.js"></script>
+  <script>
+    var days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    var timeSlots = ['9:00-10:00', '10:00-11:00', '11:00-12:00', '12:00-1:00', '1:00-2:00', '2:00-3:00', '3:00-4:00', '4:00-5:00'];
+
+    document.addEventListener('DOMContentLoaded', loadTimetable);
+
+    async function loadTimetable() {
+      var semester = document.getElementById('ttSemester').value;
+      var qs = semester ? '?semester=' + semester : '';
+      var entries = await API.get('/timetable' + qs);
+      var tbody = document.getElementById('ttBody');
+      tbody.innerHTML = '';
+
+      timeSlots.forEach(function(slot) {
+        var tr = document.createElement('tr');
+        tr.innerHTML = '<td class="time-slot">' + slot + '</td>';
+        days.forEach(function(day) {
+          var dayEntries = entries.filter(function(e) { return e.day === day && e.start_time.slice(0,5) >= slot.split('-')[0] && e.start_time.slice(0,5) < slot.split('-')[1]; });
+          var td = document.createElement('td');
+          dayEntries.forEach(function(e) {
+            var div = document.createElement('div');
+            div.className = 'tt-entry';
+            div.innerHTML = '<strong>' + e.course_code + '</strong><br>' + e.course_name + '<br>' + (e.teacher_name || '') + (e.room ? ' | ' + e.room : '');
+            td.appendChild(div);
+          });
+          tr.appendChild(td);
+        });
+        tbody.appendChild(tr);
+      });
+    }
+  </script>
+</body>
+</html>
