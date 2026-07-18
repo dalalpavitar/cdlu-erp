@@ -152,7 +152,7 @@ async function loadStudentPortal(user){
       '<tr><td>Father Name</td><td>'+(stu.father_name||'-')+'</td><td>Mother Name</td><td>'+(stu.mother_name||'-')+'</td></tr>'+
       '<tr><td>Mobile Number</td><td>'+stu.phone+'</td><td>Date of Birth</td><td>'+(stu.dob?stu.dob.slice(0,10):'-')+'</td></tr>'+
       '<tr><td>College Name</td><td colspan="3">'+college+'</td></tr>'+
-      '<tr><td>Course Name</td><td colspan="3">'+prog+'</td></tr>'+
+      '<tr><td>Programme</td><td colspan="3">'+prog+'</td></tr>'+
       '<tr><td>Semester/Year</td><td colspan="3">Semester-'+romanSem(stu.semester)+'</td></tr>'+
       '<tr><td>Gender</td><td>'+(stu.gender||'-')+'</td><td>Category</td><td>'+(stu.category||'-')+'</td></tr>'+
       '<tr><td>Permanent Address</td><td colspan="3">'+(stu.address||'-')+'</td></tr>';
