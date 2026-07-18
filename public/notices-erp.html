@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Notices | CDLU ERP</title><link rel="icon" href="images/favicon.ico"><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"><link rel="stylesheet" href="css/style.css">
+<style>
+.notice-card{background:var(--white);padding:18px 20px;border-radius:var(--radius);box-shadow:var(--shadow);margin-bottom:12px;border-left:4px solid var(--saffron);transition:all var(--transition);}
+.notice-card:hover{box-shadow:var(--shadow-lg);}
+.notice-card.urgent{border-left-color:#c62828;}
+.notice-card.important{border-left-color:var(--gold);}
+.notice-card h3{font-size:1rem;color:var(--navy);margin-bottom:4px;}
+.notice-card .meta{font-size:0.78rem;color:var(--text-light);margin-bottom:8px;}
+.notice-card .meta span{margin-right:15px;}
+.notice-card .content{font-size:0.88rem;color:var(--text);line-height:1.5;}
+.notice-card .badge{font-size:0.7rem;padding:2px 8px;border-radius:10px;}
+</style></head>
+<body><div class="top-bar"><div class="container"><div class="top-bar-left"><span>श्रद्धावान लभते ज्ञानं</span></div><div class="top-bar-right"><span id="userInfo" style="margin-right:15px;"></span><a href="logout.html">Logout</a></div></div></div>
+<header class="header"><div class="container"><a href="index.html" class="logo"><img src="images/cdlu-logo.png" alt="CDLU"><div class="logo-text"><h1>CDLU ERP Portal</h1><span>Integrated University Management System</span></div></a></div></header>
+<div class="erp-layout"><div class="erp-sidebar"><h3>Main Menu</h3><ul class="erp-nav"><li><a href="dashboard.html"><i class="fas fa-home"></i> Dashboard</a></li><li><a href="attendance.html"><i class="fas fa-calendar-check"></i> Attendance</a></li><li><a href="fees.html"><i class="fas fa-money-bill"></i> Fees</a></li><li><a href="results-entry.html"><i class="fas fa-file-lines"></i> Results</a></li><li><a href="timetable.html"><i class="fas fa-table"></i> Timetable</a></li><li><a href="notices-erp.html" class="active"><i class="fas fa-bullhorn"></i> Notices</a></li><li><a href="admin.html"><i class="fas fa-cogs"></i> Admin</a></li><li><a href="index.html"><i class="fas fa-globe"></i> Back to Site</a></li></ul></div>
+<div class="erp-content"><h1>Notices</h1>
+<div id="adminNoticeControls" style="display:none;margin-bottom:20px;">
+<button class="btn btn-primary" onclick="showCreateForm()"><i class="fas fa-plus"></i> Create New Notice</button>
+<div id="createNoticeForm" style="display:none;margin-top:15px;max-width:600px;">
+<div class="form-group"><label>Title *</label><input id="nTitle" class="form-control" placeholder="Notice title"></div>
+<div class="form-group"><label>Content</label><textarea id="nContent" class="form-control" rows="4" placeholder="Notice content"></textarea></div>
+<div class="form-row"><div class="form-group"><label>Priority</label><select id="nPriority" class="form-control"><option value="normal">Normal</option><option value="important">Important</option><option value="urgent">Urgent</option></select></div>
+<div class="form-group"><label>Target</label><select id="nTarget" class="form-control"><option value="all">All</option><option value="students">Students</option><option value="teachers">Teachers</option></select></div></div>
+<button class="btn btn-primary" onclick="createNotice()">Publish Notice</button> <button class="btn btn-outline" onclick="hideCreateForm()">Cancel</button>
+<span id="nMsg" style="margin-left:10px;"></span>
+</div></div>
+<div id="noticeList"><p style="color:var(--text-light);text-align:center;padding:30px;">Loading notices...</p></div>
+</div></div>
+<footer class="footer"><div class="container"><div class="footer-bottom"><span>&copy; 2026 CDLU ERP Portal</span></div></div></footer>
+<script src="js/api.js"></script><script src="js/auth.js"></script><script src="js/script.js"></script>
+<script>
+function showCreateForm(){document.getElementById('createNoticeForm').style.display='block';}
+function hideCreateForm(){document.getElementById('createNoticeForm').style.display='none';document.getElementById('nMsg').innerHTML='';}
+
+async function createNotice(){
+  var title = document.getElementById('nTitle').value.trim();
+  if(!title){document.getElementById('nMsg').innerHTML='<span style="color:red;">Title required</span>';return;}
+  document.getElementById('nMsg').innerHTML='<i class="fas fa-spinner fa-spin"></i>';
+  try{
+    var r = await API.post('/notices',{
+      title: title,
+      content: document.getElementById('nContent').value.trim(),
+      priority: document.getElementById('nPriority').value,
+      target: document.getElementById('nTarget').value
+    });
+    if(r.success){
+      document.getElementById('nMsg').innerHTML='<span style="color:green;">Notice published!</span>';
+      document.getElementById('nTitle').value='';
+      document.getElementById('nContent').value='';
+      hideCreateForm();
+      loadNotices();
+    } else {
+      document.getElementById('nMsg').innerHTML='<span style="color:red;">'+(r.error||'Failed')+'</span>';
+    }
+  }catch(e){
+    document.getElementById('nMsg').innerHTML='<span style="color:red;">'+(e.error||'Error')+'</span>';
+  }
+}
+
+async function deleteNotice(id){
+  if(!confirm('Delete this notice?')) return;
+  try{
+    var r = await API.delete('/notices/'+id);
+    if(r.success) loadNotices();
+  }catch(e){}
+}
+
+async function loadNotices(){
+  var user = checkAuth();
+  var target = (user && user.role === 'student') ? 'students' : 'all';
+  try{
+    var data = await API.get('/notices?target='+target);
+    var el = document.getElementById('noticeList');
+    if(!data || data.length === 0){
+      el.innerHTML = '<p style="color:var(--text-light);text-align:center;padding:30px;">No notices available.</p>';
+      return;
+    }
+    var html = '';
+    data.forEach(function(n){
+      var cls = n.priority === 'urgent' ? 'urgent' : (n.priority === 'important' ? 'important' : '');
+      var priorityLabel = n.priority ? n.priority.charAt(0).toUpperCase()+n.priority.slice(1) : 'Normal';
+      var badgeCls = n.priority === 'urgent' ? 'badge-danger' : (n.priority === 'important' ? 'badge-warning' : 'badge-success');
+      html += '<div class="notice-card '+cls+'"><h3>'+n.title+'</h3>';
+      html += '<div class="meta"><span><i class="far fa-calendar"></i> '+(n.created_at?n.created_at.slice(0,10):'-')+'</span>';
+      html += '<span><span class="badge '+badgeCls+'">'+priorityLabel+'</span></span>';
+      html += '<span><i class="fas fa-user"></i> '+(n.posted_by_name||'Admin')+'</span>';
+      // Show delete button only for admin (will fail on server for non-admin)
+      if(user && user.role === 'admin'){
+        html += '<span style="float:right;"><button class="btn btn-sm btn-danger" onclick="deleteNotice('+n.id+')"><i class="fas fa-trash"></i></button></span>';
+      }
+      html += '</div>';
+      if(n.content) html += '<div class="content">'+n.content+'</div>';
+      html += '</div>';
+    });
+    el.innerHTML = html;
+  }catch(e){
+    document.getElementById('noticeList').innerHTML = '<p style="color:#c62828;text-align:center;">Error loading notices.</p>';
+  }
+}
+
+document.addEventListener('DOMContentLoaded',function(){
+  var user = requireAuth(['admin','teacher','student']);
+  if(!user) return;
+  var el = document.getElementById('userInfo');
+  if(el) el.innerHTML = '<i class="fas fa-user"></i> '+(user.name||user.role);
+  if(user.role === 'admin' || user.role === 'teacher'){
+    document.getElementById('adminNoticeControls').style.display = 'block';
+  }
+  loadNotices();
+});
+</script>
+</body></html>

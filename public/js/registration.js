@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var data = {
       name: document.getElementById('studentName').value.trim(),
       fatherName: document.getElementById('fatherName').value.trim(),
+      motherName: document.getElementById('motherName').value.trim(),
       dob: document.getElementById('dob').value,
       gender: document.getElementById('gender').value,
       category: document.getElementById('category').value,

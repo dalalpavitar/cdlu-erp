@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const db = require('../config/db');
+const { adminOnly } = require('../middleware/auth');
 
 router.get('/', async (req, res) => {
   try {
@@ -36,7 +37,7 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-router.post('/', async (req, res) => {
+router.post('/', adminOnly, async (req, res) => {
   try {
     const { name, email, phone, departmentId, qualification, password } = req.body;
     if (!name || !email || !password) return res.status(400).json({ error: 'Name, email and password required' });
@@ -53,7 +54,7 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', adminOnly, async (req, res) => {
   try {
     const { name, email, phone, departmentId, qualification } = req.body;
     await db.query(
@@ -67,7 +68,7 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', adminOnly, async (req, res) => {
   try {
     await db.query('DELETE FROM teachers WHERE id = ?', [req.params.id]);
     res.json({ success: true });

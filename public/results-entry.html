@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Results Entry | CDLU ERP</title><link rel="icon" href="images/favicon.ico"><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"><link rel="stylesheet" href="css/style.css">
+<style>
+.results-msg{padding:12px;border-radius:5px;margin:10px 0;display:none;text-align:center;}
+.results-msg.success{display:block;background:#e8f5e9;color:#138808;}
+.results-msg.error{display:block;background:#fce4e4;color:#c0392b;}
+.results-msg.info{display:block;background:#e3f2fd;color:#1565c0;}
+</style></head>
+<body><div class="top-bar"><div class="container"><div class="top-bar-left"><span>श्रद्धावान लभते ज्ञानं</span></div><div class="top-bar-right"><span id="userInfo" style="margin-right:15px;"></span><a href="logout.html">Logout</a></div></div></div>
+<header class="header"><div class="container"><a href="index.html" class="logo"><img src="images/cdlu-logo.png" alt="CDLU"><div class="logo-text"><h1>CDLU ERP Portal</h1><span>Integrated University Management System</span></div></a></div></header>
+<div class="erp-layout"><div class="erp-sidebar"><h3>Main Menu</h3><ul class="erp-nav"><li><a href="dashboard.html"><i class="fas fa-home"></i> Dashboard</a></li><li><a href="attendance.html"><i class="fas fa-calendar-check"></i> Attendance</a></li><li><a href="fees.html"><i class="fas fa-money-bill"></i> Fees</a></li><li><a href="results-entry.html" class="active"><i class="fas fa-file-lines"></i> Results</a></li><li><a href="timetable.html"><i class="fas fa-table"></i> Timetable</a></li><li><a href="notices-erp.html"><i class="fas fa-bullhorn"></i> Notices</a></li><li><a href="admin.html"><i class="fas fa-cogs"></i> Admin</a></li><li><a href="index.html"><i class="fas fa-globe"></i> Back to Site</a></li></ul></div>
+<div class="erp-content"><h1>Results</h1>
+<div id="resultsMsg" class="results-msg"></div>
+<div id="studentResultsView" style="display:none;"><h2>My Results</h2><div id="myResultsContent"><p style="color:var(--text-light);">Loading...</p></div></div>
+<div id="teacherResultsView" style="display:none;">
+<div class="form-row"><div class="form-group"><label>Programme</label><select id="selProgram" class="form-control"><option value="">-- Select --</option></select></div><div class="form-group"><label>Semester</label><select id="selSemester" class="form-control"><option value="">-- Select --</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option><option value="6">6th</option></select></div><div class="form-group"><label>Course / Subject</label><select id="selCourse" class="form-control"><option value="">-- Select Programme & Semester first --</option></select></div></div>
+<div id="marksEntry" style="display:none;margin-top:20px;">
+<h3>Enter Marks</h3>
+<p style="font-size:0.85rem;color:var(--text-light);margin-bottom:10px;">Enter marks for <strong id="courseNameDisplay"></strong></p>
+<div class="table-wrap"><table class="table" id="marksTable"><tr><th>#</th><th>Reg ID</th><th>Student Name</th><th>Theory (100)</th><th>Practical (50)</th><th>Total</th><th>Grade</th></tr></table></div>
+<button class="btn btn-primary" id="btnSave" onclick="saveAllResults()"><i class="fas fa-save"></i> Save All Results</button>
+</div>
+</div>
+</div></div>
+<footer class="footer"><div class="container"><div class="footer-bottom"><span>&copy; 2026 CDLU ERP Portal</span></div></div></footer>
+<script src="js/api.js"></script><script src="js/auth.js"></script><script src="js/script.js"></script>
+<script>
+var currentStudents=[],currentCourseId=null,currentSemester=null;
+
+function showMsg(msg,type){var el=document.getElementById('resultsMsg');el.textContent=msg;el.className='results-msg '+type;}
+
+function calcGrade(marks,maxM){var p=(marks/maxM)*100;if(p>=90)return'A+';if(p>=80)return'A';if(p>=70)return'B+';if(p>=60)return'B';if(p>=50)return'C';if(p>=40)return'D';return'F';}
+
+function updateRow(row){
+  var theory=parseFloat(row.querySelector('.theory').value)||0;
+  var practical=parseFloat(row.querySelector('.practical').value)||0;
+  var total=theory+practical;
+  row.querySelector('.total').textContent=total;
+  var grade=(theory>0||practical>0)?calcGrade(total,150):'-';
+  row.querySelector('.grade').textContent=grade;
+}
+
+async function loadStudents(){
+  var pid=document.getElementById('selProgram').value;
+  var sem=document.getElementById('selSemester').value;
+  var cid=document.getElementById('selCourse').value;
+  if(!pid||!sem||!cid)return;
+  currentCourseId=cid;currentSemester=sem;
+  document.getElementById('courseNameDisplay').textContent=document.getElementById('selCourse').options[document.getElementById('selCourse').selectedIndex].text;
+  try{
+    var students=await API.get('/students?program='+pid+'&semester='+sem);
+    currentStudents=students||[];
+    var tbody='';
+    if(currentStudents.length===0){
+      document.getElementById('marksEntry').style.display='none';
+      showMsg('No students found for this programme and semester.','info');
+      return;
+    }
+    currentStudents.forEach(function(s,i){
+      tbody+='<tr><td>'+(i+1)+'</td><td>'+(s.reg_id||'-')+'</td><td>'+(s.name||'-')+'</td>';
+      tbody+='<td><input type="number" class="form-control theory" style="width:80px;" min="0" max="100" value="" oninput="updateRow(this.parentElement.parentElement)"></td>';
+      tbody+='<td><input type="number" class="form-control practical" style="width:80px;" min="0" max="50" value="" oninput="updateRow(this.parentElement.parentElement)"></td>';
+      tbody+='<td class="total">0</td><td class="grade">-</td></tr>';
+    });
+    document.querySelector('#marksTable').innerHTML='<tr><th>#</th><th>Reg ID</th><th>Student Name</th><th>Theory (100)</th><th>Practical (50)</th><th>Total</th><th>Grade</th></tr>'+tbody;
+    document.getElementById('marksEntry').style.display='block';
+    showMsg('Loaded '+currentStudents.length+' students. Enter marks and click Save.','info');
+  }catch(e){showMsg('Error loading students.','error');}
+}
+
+async function saveAllResults(){
+  var rows=document.querySelectorAll('#marksTable tr:not(:first-child)');
+  var results=[];
+  rows.forEach(function(row){
+    var cells=row.querySelectorAll('td');
+    var theory=parseFloat(row.querySelector('.theory').value)||0;
+    var practical=parseFloat(row.querySelector('.practical')?row.querySelector('.practical').value:0)||0;
+    var studentIdx=Array.from(row.parentElement.children).indexOf(row)-1;
+    if(studentIdx<0||studentIdx>=currentStudents.length)return;
+    var sid=currentStudents[studentIdx].id;
+    if(theory>0)results.push({studentId:sid,courseId:currentCourseId,semester:currentSemester,examType:'theory',marksObtained:theory,maxMarks:100});
+    if(practical>0)results.push({studentId:sid,courseId:currentCourseId,semester:currentSemester,examType:'practical',marksObtained:practical,maxMarks:50});
+  });
+  if(results.length===0){showMsg('No marks entered to save.','error');return;}
+  var user=checkAuth();
+  var saved=0,failed=0;
+  showMsg('Saving '+results.length+' entries...','info');
+  document.getElementById('btnSave').disabled=true;
+  for(var i=0;i<results.length;i++){
+    try{
+      var r=await API.post('/results',results[i]);
+      if(r.success)saved++;else failed++;
+    }catch(e){failed++;}
+  }
+  document.getElementById('btnSave').disabled=false;
+  if(failed===0)showMsg('All '+saved+' marks saved successfully!','success');
+  else showMsg(saved+' saved, '+failed+' failed.','error');
+}
+
+async function loadCourses(){
+  var pid=document.getElementById('selProgram').value;
+  var sem=document.getElementById('selSemester').value;
+  var sel=document.getElementById('selCourse');
+  sel.innerHTML='<option value="">Loading...</option>';
+  if(!pid||!sem){sel.innerHTML='<option value="">-- Select Programme & Semester first --</option>';return;}
+  try{
+    var courses=await API.get('/courses?programId='+pid+'&semester='+sem);
+    sel.innerHTML='<option value="">-- Select Course --</option>';
+    courses.forEach(function(c){sel.innerHTML+='<option value="'+c.id+'">'+c.name+' ('+c.code+')</option>';});
+  }catch(e){sel.innerHTML='<option value="">Error loading courses</option>';}
+  document.getElementById('marksEntry').style.display='none';
+}
+
+document.getElementById('selProgram').addEventListener('change',loadCourses);
+document.getElementById('selSemester').addEventListener('change',loadCourses);
+document.getElementById('selCourse').addEventListener('change',loadStudents);
+
+async function loadStudentResults(studentId){
+  try{
+    var data=await API.get('/results/student/'+studentId);
+    var keys=Object.keys(data);
+    if(keys.length===0){document.getElementById('myResultsContent').innerHTML='<p style="color:var(--text-light);">No results published yet.</p>';return;}
+    var html='';
+    keys.sort().forEach(function(semKey){
+      var sem=data[semKey];
+      html+='<h3 style="margin:20px 0 10px;color:var(--navy);font-size:1.1rem;">'+semKey+'</h3>';
+      html+='<table class="admin-table"><tr><th>Course</th><th>Theory</th><th>Practical</th><th>Total</th><th>Grade</th></tr>';
+      var grouped={};
+      sem.subjects.forEach(function(r){
+        if(!grouped[r.course_name])grouped[r.course_name]={};
+        grouped[r.course_name][r.exam_type]=r;
+      });
+      var sortedCourses=Object.keys(grouped).sort();
+      sortedCourses.forEach(function(cname){
+        var t=grouped[cname];
+        var theory=t.Theory||t.theory||t.THEORY||{};
+        var practical=t.Practical||t.practical||t.PRACTICAL||{};
+        var thMarks=theory.marks_obtained?parseFloat(theory.marks_obtained):0;
+        var prMarks=practical.marks_obtained?parseFloat(practical.marks_obtained):0;
+        var total=thMarks+prMarks;
+        var maxTh=theory.max_marks?parseFloat(theory.max_marks):100;
+        var maxPr=practical.max_marks?parseFloat(practical.max_marks):50;
+        var pct=total/(maxTh+maxPr)*100;
+        var grade=pct>=90?'A+':pct>=80?'A':pct>=70?'B+':pct>=60?'B':pct>=50?'C':pct>=40?'D':'F';
+        html+='<tr><td>'+cname+'</td><td>'+(theory.marks_obtained!==undefined?thMarks+"/"+maxTh:'-')+'</td><td>'+(practical.marks_obtained!==undefined?prMarks+"/"+maxPr:'-')+'</td><td><strong>'+total+'</strong></td><td><strong>'+grade+'</strong></td></tr>';
+      });
+      html+='<tr style="font-weight:700;background:var(--saffron-light);"><td>Total</td><td colspan="2">'+sem.total+'/'+sem.maxTotal+'</td><td colspan="2">'+sem.percentage+'%</td></tr>';
+      html+='</table>';
+    });
+    document.getElementById('myResultsContent').innerHTML=html;
+  }catch(e){document.getElementById('myResultsContent').innerHTML='<p style="color:#c62828;">Error loading results.</p>';}
+}
+
+async function loadProgramsForTeacher(){
+  try{
+    var programs=await API.get('/dashboard/programs');
+    var sel=document.getElementById('selProgram');
+    programs.forEach(function(p){sel.innerHTML+='<option value="'+p.id+'">'+p.name+' ('+p.code+')</option>';});
+  }catch(e){}
+}
+
+document.addEventListener('DOMContentLoaded',function(){
+  var user=requireAuth(['admin','teacher','student']);
+  if(!user)return;
+  var el=document.getElementById('userInfo');
+  if(el)el.innerHTML='<i class="fas fa-user"></i> '+(user.name||user.role);
+  if(user.role==='student'&&user.id){
+    document.getElementById('studentResultsView').style.display='block';
+    loadStudentResults(user.id);
+  } else {
+    document.getElementById('teacherResultsView').style.display='block';
+    loadProgramsForTeacher();
+  }
+});
+</script>
+</body></html>

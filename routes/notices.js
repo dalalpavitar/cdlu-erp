@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../config/db');
-const { adminAuth } = require('../middleware/auth');
+const { adminOnly } = require('../middleware/auth');
 
 router.get('/', async (req, res) => {
   try {
@@ -21,7 +21,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.post('/', async (req, res) => {
+router.post('/', adminOnly, async (req, res) => {
   try {
     const { title, content, postedBy, priority, target } = req.body;
     if (!title) return res.status(400).json({ error: 'Title required' });
@@ -40,7 +40,7 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', adminOnly, async (req, res) => {
   try {
     await db.query('DELETE FROM notices WHERE id = ?', [req.params.id]);
     res.json({ success: true });

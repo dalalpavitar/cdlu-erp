@@ -1,67 +1,126 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Timetable | CDLU ERP</title>
-  <link rel="stylesheet" href="css/style.css">
-  <style>
-    .tt-controls { display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 20px; align-items: end; }
-    .tt-grid { width: 100%; border-collapse: collapse; }
-    .tt-grid th { background: var(--navy); color: white; padding: 12px 8px; text-align: center; font-size: 13px; }
-    .tt-grid td { border: 1px solid #ddd; padding: 8px; vertical-align: top; height: 100px; width: 14.28%; font-size: 12px; }
-    .tt-grid .time-slot { background: #f5f5f5; font-weight: 600; width: 80px; }
-    .tt-entry { background: #e8f5e9; padding: 4px 6px; margin: 2px 0; border-radius: 3px; border-left: 3px solid #138808; font-size: 11px; }
-  </style>
-</head>
-<body>
-  <div class="top-bar"><div class="container"><span>Shraddhavan Labhate Gyanam</span><span><a href="dashboard.html">Back to Dashboard</a></span></div></div>
-  <header class="header"><div class="container"><a href="index.html" class="logo"><div class="logo-icon">CDLU</div><div class="logo-text"><h1>Chaudhary Devi Lal University</h1><span>Timetable</span></div></a></div></header>
-  <section class="section"><div class="container">
-    <h2 style="color:var(--navy);margin-bottom:20px">Class Timetable</h2>
-    <div class="tt-controls">
-      <div class="form-group"><label>Semester</label><select id="ttSemester" class="form-input" onchange="loadTimetable()"><option value="">All</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option></select></div>
-    </div>
-    <div style="overflow-x:auto">
-      <table class="tt-grid" id="ttGrid">
-        <thead><tr><th>Time</th><th>Monday</th><th>Tuesday</th><th>Wednesday</th><th>Thursday</th><th>Friday</th><th>Saturday</th></tr></thead>
-        <tbody id="ttBody"></tbody>
-      </table>
-    </div>
-  </div></section>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Timetable | CDLU ERP</title><link rel="icon" href="images/favicon.ico"><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"><link rel="stylesheet" href="css/style.css">
+<style>
+.tt-grid{display:grid;grid-template-columns:120px repeat(6,1fr);gap:1px;background:var(--border);border-radius:var(--radius);overflow:hidden;margin-top:15px;}
+.tt-header{background:var(--navy);color:var(--white);padding:12px 8px;font-weight:600;font-size:0.82rem;text-align:center;}
+.tt-cell{background:var(--white);padding:10px 6px;font-size:0.78rem;min-height:60px;}
+.tt-cell .slot{background:var(--saffron-light);padding:4px 6px;border-radius:4px;margin-bottom:4px;border-left:3px solid var(--saffron);}
+.tt-cell .slot .subj{font-weight:600;color:var(--navy);}
+.tt-cell .slot .detail{font-size:0.7rem;color:var(--text-light);}
+.tt-time{background:var(--bg-light);padding:12px 8px;font-weight:600;font-size:0.75rem;text-align:center;color:var(--text-light);}
+</style></head>
+<body><div class="top-bar"><div class="container"><div class="top-bar-left"><span>श्रद्धावान लभते ज्ञानं</span></div><div class="top-bar-right"><span id="userInfo" style="margin-right:15px;"></span><a href="logout.html">Logout</a></div></div></div>
+<header class="header"><div class="container"><a href="index.html" class="logo"><img src="images/cdlu-logo.png" alt="CDLU"><div class="logo-text"><h1>CDLU ERP Portal</h1><span>Integrated University Management System</span></div></a></div></header>
+<div class="erp-layout"><div class="erp-sidebar"><h3>Main Menu</h3><ul class="erp-nav"><li><a href="dashboard.html"><i class="fas fa-home"></i> Dashboard</a></li><li><a href="attendance.html"><i class="fas fa-calendar-check"></i> Attendance</a></li><li><a href="fees.html"><i class="fas fa-money-bill"></i> Fees</a></li><li><a href="results-entry.html"><i class="fas fa-file-lines"></i> Results</a></li><li><a href="timetable.html" class="active"><i class="fas fa-table"></i> Timetable</a></li><li><a href="notices-erp.html"><i class="fas fa-bullhorn"></i> Notices</a></li><li><a href="admin.html"><i class="fas fa-cogs"></i> Admin</a></li><li><a href="index.html"><i class="fas fa-globe"></i> Back to Site</a></li></ul></div>
+<div class="erp-content"><h1>Timetable</h1>
+<div id="ttStudentInfo" style="display:none;" class="student-info"></div>
+<div id="ttFilters" style="display:none;" class="form-row">
+<div class="form-group"><label>Semester</label><select id="ttSemester" class="form-control"><option value="">All</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option><option value="6">6th</option></select></div>
+<div class="form-group"><label>Day</label><select id="ttDay" class="form-control"><option value="">All</option><option value="Monday">Monday</option><option value="Tuesday">Tuesday</option><option value="Wednesday">Wednesday</option><option value="Thursday">Thursday</option><option value="Friday">Friday</option><option value="Saturday">Saturday</option></select></div>
+<div><label>&nbsp;</label><button class="btn btn-primary" onclick="loadTt()"><i class="fas fa-search"></i> View</button></div>
+</div>
+<div id="ttContent"><p style="color:var(--text-light);text-align:center;padding:40px;">Loading timetable...</p></div>
+</div></div>
+<footer class="footer"><div class="container"><div class="footer-bottom"><span>&copy; 2026 CDLU ERP Portal</span></div></div></footer>
+<script src="js/api.js"></script><script src="js/auth.js"></script><script src="js/script.js"></script>
+<script>
+var daysOrder = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 
-  <footer class="footer"><div class="container"><div class="footer-bottom"><p>&copy; 2026 CDLU Sirsa</p></div></div></footer>
-  <script src="js/api.js"></script>
-  <script>
-    var days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    var timeSlots = ['9:00-10:00', '10:00-11:00', '11:00-12:00', '12:00-1:00', '1:00-2:00', '2:00-3:00', '3:00-4:00', '4:00-5:00'];
+function formatTime(t){
+  if(!t)return '';
+  var p = t.split(':');
+  var h = parseInt(p[0]), m = p[1];
+  return (h%12||12)+':'+m+(h<12?'AM':'PM');
+}
 
-    document.addEventListener('DOMContentLoaded', loadTimetable);
+async function loadTt(){
+  var sem = document.getElementById('ttSemester') ? document.getElementById('ttSemester').value : '';
+  var day = document.getElementById('ttDay') ? document.getElementById('ttDay').value : '';
+  var params = [];
+  if(sem) params.push('semester='+sem);
+  if(day) params.push('day='+day);
+  var qs = params.length ? '?'+params.join('&') : '';
+  try{
+    var data = await API.get('/timetable'+qs);
+    renderTt(data);
+  }catch(e){
+    document.getElementById('ttContent').innerHTML = '<p style="color:#c62828;text-align:center;">Error loading timetable.</p>';
+  }
+}
 
-    async function loadTimetable() {
-      var semester = document.getElementById('ttSemester').value;
-      var qs = semester ? '?semester=' + semester : '';
-      var entries = await API.get('/timetable' + qs);
-      var tbody = document.getElementById('ttBody');
-      tbody.innerHTML = '';
-
-      timeSlots.forEach(function(slot) {
-        var tr = document.createElement('tr');
-        tr.innerHTML = '<td class="time-slot">' + slot + '</td>';
-        days.forEach(function(day) {
-          var dayEntries = entries.filter(function(e) { return e.day === day && e.start_time.slice(0,5) >= slot.split('-')[0] && e.start_time.slice(0,5) < slot.split('-')[1]; });
-          var td = document.createElement('td');
-          dayEntries.forEach(function(e) {
-            var div = document.createElement('div');
-            div.className = 'tt-entry';
-            div.innerHTML = '<strong>' + e.course_code + '</strong><br>' + e.course_name + '<br>' + (e.teacher_name || '') + (e.room ? ' | ' + e.room : '');
-            td.appendChild(div);
-          });
-          tr.appendChild(td);
+function renderTt(entries){
+  var el = document.getElementById('ttContent');
+  if(!entries || entries.length === 0){
+    el.innerHTML = '<p style="color:var(--text-light);text-align:center;padding:40px;">No timetable entries found.</p>';
+    return;
+  }
+  // Group by day
+  var grouped = {};
+  entries.forEach(function(e){
+    if(!grouped[e.day]) grouped[e.day] = [];
+    grouped[e.day].push(e);
+  });
+  // Sort entries within each day by start_time
+  daysOrder.forEach(function(d){
+    if(grouped[d]) grouped[d].sort(function(a,b){return a.start_time.localeCompare(b.start_time);});
+  });
+  // Generate table
+  var html = '<div class="tt-grid"><div class="tt-header">Day / Time</div>';
+  // Collect unique time slots across all days
+  var allSlots = [];
+  daysOrder.forEach(function(d){
+    if(grouped[d]) grouped[d].forEach(function(e){
+      var key = e.start_time + '-' + e.end_time;
+      if(!allSlots.find(function(s){return s.key===key;})) allSlots.push({key:key,start:e.start_time,end:e.end_time});
+    });
+  });
+  allSlots.sort(function(a,b){return a.start.localeCompare(b.start);});
+  // Header row
+  allSlots.forEach(function(s){html += '<div class="tt-header">'+formatTime(s.start)+' - '+formatTime(s.end)+'</div>';});
+  // Day rows
+  daysOrder.forEach(function(day){
+    html += '<div class="tt-time">'+day.slice(0,3)+'</div>';
+    allSlots.forEach(function(slot){
+      var found = grouped[day] ? grouped[day].filter(function(e){return e.start_time===slot.start && e.end_time===slot.end;}) : [];
+      if(found.length > 0){
+        html += '<div class="tt-cell">';
+        found.forEach(function(e){
+          html += '<div class="slot"><div class="subj">'+e.course_name+'</div><div class="detail">'+(e.course_code||'')+'<br>'+(e.room?'Room: '+e.room:'')+'</div></div>';
         });
-        tbody.appendChild(tr);
-      });
+        html += '</div>';
+      } else {
+        html += '<div class="tt-cell" style="color:var(--text-light);font-size:0.7rem;text-align:center;">—</div>';
+      }
+    });
+  });
+  html += '</div>';
+  el.innerHTML = html;
+}
+
+document.addEventListener('DOMContentLoaded',async function(){
+  var user = requireAuth(['admin','teacher','student']);
+  if(!user) return;
+  var el = document.getElementById('userInfo');
+  if(el) el.innerHTML = '<i class="fas fa-user"></i> '+(user.name||user.role);
+  if(user.role === 'student' && user.id){
+    document.getElementById('ttStudentInfo').style.display = 'block';
+    document.getElementById('ttFilters').style.display = 'none';
+    // Fetch student's own semester
+    try{
+      var student = await API.get('/students/'+user.id);
+      var sem = student.semester || 1;
+      document.getElementById('ttStudentInfo').innerHTML = '<h2>My Timetable</h2><p><span class="label">Student:</span> '+user.name+' | <span class="label">Semester:</span> '+sem+'</p>';
+      var data = await API.get('/timetable?semester='+sem);
+      renderTt(data);
+    }catch(e){
+      document.getElementById('ttContent').innerHTML = '<p style="color:#c62828;text-align:center;">Error loading your timetable.</p>';
     }
-  </script>
-</body>
-</html>
+  } else {
+    document.getElementById('ttFilters').style.display = 'flex';
+    document.getElementById('ttSemester').addEventListener('change', loadTt);
+    document.getElementById('ttDay').addEventListener('change', loadTt);
+    loadTt();
+  }
+});
+</script>
+</body></html>

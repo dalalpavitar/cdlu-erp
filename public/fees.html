@@ -1,128 +1,71 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Fee Management | CDLU ERP</title>
-  <link rel="stylesheet" href="css/style.css">
-  <style>
-    .fee-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 25px; }
-    .fee-controls { display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 20px; align-items: end; }
-    .fee-controls .form-group { flex: 1; min-width: 150px; }
-    .fee-table { width: 100%; border-collapse: collapse; }
-    .fee-table th { background: var(--navy); color: white; padding: 10px; text-align: left; font-size: 13px; }
-    .fee-table td { padding: 8px 10px; border-bottom: 1px solid #eee; }
-    .paid { color: #138808; font-weight: 600; }
-    .unpaid { color: #c0392b; font-weight: 600; }
-    .partial { color: #e65100; font-weight: 600; }
-  </style>
-</head>
-<body>
-  <div class="top-bar"><div class="container"><span>Shraddhavan Labhate Gyanam</span><span><a href="dashboard.html">Back to Dashboard</a></span></div></div>
-  <header class="header"><div class="container"><a href="index.html" class="logo"><div class="logo-icon">CDLU</div><div class="logo-text"><h1>Chaudhary Devi Lal University</h1><span>Fee Management</span></div></a></div></header>
-  <section class="section"><div class="container">
-    <h2 style="color:var(--navy);margin-bottom:20px">Fee Management</h2>
-    <div class="fee-stats" id="feeStats"></div>
-    <div class="fee-controls">
-      <div class="form-group"><label>Filter by Status</label><select id="feeFilter" class="form-input" onchange="loadFees()"><option value="">All</option><option value="unpaid">Unpaid</option><option value="partial">Partial</option><option value="paid">Paid</option></select></div>
-      <div class="form-group"><label>Semester</label><select id="feeSemester" class="form-input" onchange="loadFees()"><option value="">All</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option></select></div>
-      <button class="btn btn-primary" onclick="showAddFee()">Add Fee Record</button>
-    </div>
-    <div style="overflow-x:auto">
-      <table class="fee-table"><thead><tr><th>#</th><th>Student</th><th>Reg ID</th><th>Sem</th><th>Total</th><th>Paid</th><th>Due</th><th>Status</th><th>Due Date</th><th>Action</th></tr></thead><tbody id="feeBody"></tbody></table>
-    </div>
-    <p id="feeNoData" style="text-align:center;padding:30px;color:#999;display:none">No fee records found.</p>
-  </div></section>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Fees | CDLU ERP</title><link rel="icon" href="images/favicon.ico"><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"><link rel="stylesheet" href="css/style.css">
+<style>
+.fee-summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px;margin:20px 0;}
+.fee-stat{background:var(--white);padding:20px;border-radius:var(--radius);box-shadow:var(--shadow);border-left:4px solid var(--saffron);}
+.fee-stat h4{font-size:0.82rem;color:var(--text-light);margin-bottom:5px;}
+.fee-stat .num{font-size:1.6rem;font-weight:700;color:var(--navy);}
+.fee-stat .num.green{color:var(--green);}.fee-stat .num.red{color:#c62828;}
+</style></head>
+<body><div class="top-bar"><div class="container"><div class="top-bar-left"><span>श्रद्धावान लभते ज्ञानं</span></div><div class="top-bar-right"><span id="userInfo" style="margin-right:15px;"></span><a href="logout.html">Logout</a></div></div></div>
+<header class="header"><div class="container"><a href="index.html" class="logo"><img src="images/cdlu-logo.png" alt="CDLU"><div class="logo-text"><h1>CDLU ERP Portal</h1><span>Integrated University Management System</span></div></a></div></header>
+<div class="erp-layout"><div class="erp-sidebar"><h3>Main Menu</h3><ul class="erp-nav"><li><a href="dashboard.html"><i class="fas fa-home"></i> Dashboard</a></li><li><a href="attendance.html"><i class="fas fa-calendar-check"></i> Attendance</a></li><li><a href="fees.html" class="active"><i class="fas fa-money-bill"></i> Fees</a></li><li><a href="results-entry.html"><i class="fas fa-file-lines"></i> Results</a></li><li><a href="timetable.html"><i class="fas fa-table"></i> Timetable</a></li><li><a href="notices-erp.html"><i class="fas fa-bullhorn"></i> Notices</a></li><li><a href="admin.html"><i class="fas fa-cogs"></i> Admin</a></li><li><a href="index.html"><i class="fas fa-globe"></i> Back to Site</a></li></ul></div>
+<div class="erp-content"><h1>Fee Management</h1>
+<div id="feeSearch" class="form-row" style="align-items:end;"><div class="form-group" style="flex:1;"><label>Student Registration ID</label><input type="text" id="feeRegId" class="form-control" placeholder="Enter Registration Number (e.g. CDLU2025001)"></div><div><button class="btn btn-primary" onclick="viewFees()"><i class="fas fa-search"></i> View Fee Details</button></div></div>
+<div id="feeMsg"></div>
+<div id="feeSummary" style="display:none;"></div>
+<div id="feeTable" style="display:none;margin-top:20px;"></div>
+</div></div>
+<footer class="footer"><div class="container"><div class="footer-bottom"><span>&copy; 2026 CDLU ERP Portal</span></div></div></footer>
+<script src="js/api.js"></script><script src="js/auth.js"></script><script src="js/script.js"></script>
+<script>
+function showFeeMsg(m,t){var el=document.getElementById('feeMsg');el.innerHTML='<div class="alert alert-'+(t||'info')+'">'+m+'</div>';setTimeout(function(){el.innerHTML='';},5000);}
 
-  <div id="addFeeModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:1000;align-items:center;justify-content:center;">
-    <div style="background:white;padding:30px;border-radius:10px;max-width:450px;width:90%;margin:auto;margin-top:10vh;">
-      <h3 style="margin-bottom:15px;color:var(--navy)">Add Fee Record</h3>
-      <div class="form-group"><label>Student</label><select id="feeStudent" class="form-input"></select></div>
-      <div class="form-group"><label>Semester</label><select id="feeNewSem" class="form-input"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option></select></div>
-      <div class="form-group"><label>Total Fees (₹)</label><input type="number" id="feeTotal" class="form-input" placeholder="e.g. 20000"></div>
-      <div class="form-group"><label>Paid Amount (₹)</label><input type="number" id="feePaid" class="form-input" placeholder="e.g. 10000" value="0"></div>
-      <div class="form-group"><label>Due Date</label><input type="date" id="feeDueDate" class="form-input"></div>
-      <div class="form-group"><label>Payment Mode</label><select id="feeMode" class="form-input"><option value="">Select</option><option value="cash">Cash</option><option value="online">Online</option><option value="cheque">Cheque</option></select></div>
-      <div style="display:flex;gap:10px;margin-top:15px">
-        <button class="btn btn-primary" onclick="saveFee()">Save</button>
-        <button class="btn" style="background:#ccc" onclick="closeModal()">Cancel</button>
-      </div>
-    </div>
-  </div>
-
-  <footer class="footer"><div class="container"><div class="footer-bottom"><p>&copy; 2026 CDLU Sirsa</p></div></div></footer>
-  <script src="js/api.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      loadFees();
-      API.get('/students').then(function(students) {
-        var sel = document.getElementById('feeStudent');
-        students.forEach(function(s) {
-          var opt = document.createElement('option');
-          opt.value = s.id; opt.textContent = s.name + ' (' + s.reg_id + ')';
-          sel.appendChild(opt);
-        });
-      });
-      loadFeeStats();
+async function viewFees(){
+  var regId=document.getElementById('feeRegId').value.trim();
+  if(!regId){showFeeMsg('Please enter a Student Registration ID.','warning');return;}
+  var summaryEl=document.getElementById('feeSummary');
+  var tableEl=document.getElementById('feeTable');
+  summaryEl.style.display='none';
+  tableEl.style.display='none';
+  try{
+    var fees=await API.get('/fees?regId='+encodeURIComponent(regId));
+    if(!fees||fees.length===0){
+      showFeeMsg('No fee records found for <strong>'+regId+'</strong>.','info');
+      return;
+    }
+    var totalFees=0, totalPaid=0, totalDue=0;
+    var rows='<table class="admin-table"><tr><th>Semester</th><th>Total Fees</th><th>Paid Amount</th><th>Due</th><th>Status</th><th>Due Date</th></tr>';
+    fees.forEach(function(f){
+      var due=(f.total_fees-f.paid_amount);
+      totalFees+=parseFloat(f.total_fees);totalPaid+=parseFloat(f.paid_amount);totalDue+=due;
+      var badge=f.status==='paid'?'success':(f.status==='partial'?'warning':'danger');
+      rows+='<tr><td>Semester '+f.semester+'</td><td>₹'+parseFloat(f.total_fees).toLocaleString()+'</td><td>₹'+parseFloat(f.paid_amount).toLocaleString()+'</td><td>₹'+due.toLocaleString()+'</td><td><span class="badge badge-'+badge+'">'+f.status.toUpperCase()+'</span></td><td>'+(f.due_date?f.due_date.slice(0,10):'-')+'</td></tr>';
     });
+    rows+='</table>';
+    summaryEl.style.display='block';
+    summaryEl.innerHTML='<div class="fee-summary"><div class="fee-stat"><h4>Total Fees</h4><div class="num">₹'+totalFees.toLocaleString()+'</div></div><div class="fee-stat"><h4>Total Paid</h4><div class="num green">₹'+totalPaid.toLocaleString()+'</div></div><div class="fee-stat"><h4>Total Due</h4><div class="num '+(totalDue>0?'red':'green')+'">₹'+totalDue.toLocaleString()+'</div></div><div class="fee-stat"><h4>Student</h4><div style="font-size:0.95rem;color:var(--navy);font-weight:600;">'+fees[0].student_name+'</div><div style="font-size:0.8rem;color:var(--text-light);">'+regId+'</div></div></div>';
+    tableEl.style.display='block';
+    tableEl.innerHTML=rows;
+  }catch(e){
+    showFeeMsg('Error loading fee details: '+(e.error||e.message||'Unknown'),'danger');
+  }
+}
 
-    async function loadFees() {
-      var status = document.getElementById('feeFilter').value;
-      var semester = document.getElementById('feeSemester').value;
-      var qs = [];
-      if (status) qs.push('status=' + status);
-      if (semester) qs.push('semester=' + semester);
-      var data = await API.get('/fees' + (qs.length ? '?' + qs.join('&') : ''));
-      var tbody = document.getElementById('feeBody');
-      tbody.innerHTML = '';
-      if (data.length === 0) { document.getElementById('feeNoData').style.display = 'block'; return; }
-      document.getElementById('feeNoData').style.display = 'none';
-      data.forEach(function(f, i) {
-        var due = f.total_fees - f.paid_amount;
-        var cls = f.status === 'paid' ? 'paid' : (f.status === 'unpaid' ? 'unpaid' : 'partial');
-        tr = document.createElement('tr');
-        tr.innerHTML = '<td>' + (i+1) + '</td><td>' + (f.student_name || '-') + '</td><td>' + (f.reg_id || '-') + '</td>' +
-          '<td>' + f.semester + '</td><td>₹' + (+f.total_fees).toLocaleString() + '</td><td>₹' + (+f.paid_amount).toLocaleString() + '</td>' +
-          '<td class="' + cls + '">₹' + due.toLocaleString() + '</td><td class="' + cls + '">' + f.status + '</td>' +
-          '<td>' + (f.due_date ? new Date(f.due_date).toLocaleDateString('en-IN') : '-') + '</td>' +
-          '<td><button onclick="payFee(' + f.id + ')" style="padding:4px 10px;background:#138808;color:white;border:none;border-radius:4px;cursor:pointer">Pay</button></td>';
-        tbody.appendChild(tr);
-      });
-    }
-
-    async function loadFeeStats() {
-      var stats = await API.get('/fees/statistics');
-      document.getElementById('feeStats').innerHTML = '<div class="dash-card" style="background:white;padding:20px;border-radius:8px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,0.06)"><span class="num" style="color:#138808">₹' + (stats.total_collected || 0).toLocaleString() + '</span><span class="label">Collected</span></div>' +
-        '<div class="dash-card" style="background:white;padding:20px;border-radius:8px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,0.06)"><span class="num" style="color:#c0392b">₹' + (stats.total_due || 0).toLocaleString() + '</span><span class="label">Due</span></div>' +
-        '<div class="dash-card" style="background:white;padding:20px;border-radius:8px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,0.06)"><span class="num">' + (stats.paid_count || 0) + '</span><span class="label">Paid Records</span></div>' +
-        '<div class="dash-card" style="background:white;padding:20px;border-radius:8px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,0.06)"><span class="num">' + (stats.unpaid_count || 0) + '</span><span class="label">Unpaid</span></div>';
-    }
-
-    function showAddFee() { document.getElementById('addFeeModal').style.display = 'flex'; }
-    function closeModal() { document.getElementById('addFeeModal').style.display = 'none'; }
-
-    async function saveFee() {
-      var data = {
-        studentId: parseInt(document.getElementById('feeStudent').value),
-        semester: parseInt(document.getElementById('feeNewSem').value),
-        totalFees: parseFloat(document.getElementById('feeTotal').value),
-        paidAmount: parseFloat(document.getElementById('feePaid').value) || 0,
-        dueDate: document.getElementById('feeDueDate').value || null,
-        paymentMode: document.getElementById('feeMode').value || null
-      };
-      if (!data.studentId || !data.totalFees) { alert('Student and total fees required'); return; }
-      var result = await API.post('/fees', data);
-      if (result.success) { closeModal(); loadFees(); loadFeeStats(); }
-      else { alert('Error: ' + (result.error || 'Failed')); }
-    }
-
-    async function payFee(feeId) {
-      var amount = prompt('Enter amount to pay:');
-      if (!amount || parseFloat(amount) <= 0) return;
-      var result = await API.put('/fees/' + feeId, { paidAmount: parseFloat(amount) });
-      if (result.success) { loadFees(); loadFeeStats(); }
-      else { alert('Error: ' + (result.error || 'Failed')); }
-    }
-  </script>
-</body>
-</html>
+document.addEventListener('DOMContentLoaded',function(){
+  var user=requireAuth(['admin','teacher','student']);
+  if(!user)return;
+  var el=document.getElementById('userInfo');
+  if(el)el.innerHTML='<i class="fas fa-user"></i> '+(user.name||user.role||'User');
+  document.getElementById('feeRegId').addEventListener('keyup',function(e){if(e.key==='Enter')viewFees();});
+  if(user.role==='student'&&user.regId){
+    document.getElementById('feeRegId').value=user.regId;
+    document.getElementById('feeSearch').style.display='none';
+    viewFees();
+  } else {
+    var params=new URLSearchParams(window.location.search);
+    if(params.get('regId')){document.getElementById('feeRegId').value=params.get('regId');viewFees();}
+  }
+});
+</script>
+</body></html>

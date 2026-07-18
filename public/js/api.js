@@ -5,8 +5,6 @@ var API = {
     return localStorage.getItem('cdluToken');
   },
 
-  adminPass: 'cdlu@2026',
-
   async get(endpoint) {
     var token = this.getToken();
     var headers = { 'Content-Type': 'application/json' };

@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../config/db');
+const { teacherAuth } = require('../middleware/auth');
 
 router.get('/', async (req, res) => {
   try {
@@ -41,7 +42,7 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-router.post('/', async (req, res) => {
+router.post('/', teacherAuth, async (req, res) => {
   try {
     const { name, code, programId, departmentId, semester, credits, teacherId, fees } = req.body;
     if (!name || !code) return res.status(400).json({ error: 'Name and code required' });
@@ -58,7 +59,7 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', teacherAuth, async (req, res) => {
   try {
     const { name, code, programId, departmentId, semester, credits, teacherId, fees } = req.body;
     await db.query(
@@ -73,7 +74,7 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', teacherAuth, async (req, res) => {
   try {
     await db.query('DELETE FROM courses WHERE id = ?', [req.params.id]);
     res.json({ success: true });

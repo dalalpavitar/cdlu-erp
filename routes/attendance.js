@@ -1,10 +1,15 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../config/db');
+const { optionalAuth, teacherAuth } = require('../middleware/auth');
 
-router.get('/', async (req, res) => {
+router.get('/', optionalAuth, async (req, res) => {
   try {
-    const { courseId, date, semester, studentId } = req.query;
+    let { courseId, date, semester, studentId } = req.query;
+    // Student can only see their own attendance
+    if (req.user && req.user.role === 'student') {
+      studentId = req.user.id;
+    }
     let sql = `SELECT a.*, s.name as student_name, s.reg_id, c.name as course_name
                FROM attendance a
                JOIN students s ON a.student_id = s.id
@@ -24,7 +29,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.post('/batch', async (req, res) => {
+router.post('/batch', teacherAuth, async (req, res) => {
   try {
     const { records } = req.body;
     if (!records || !Array.isArray(records) || records.length === 0) {
@@ -52,7 +57,7 @@ router.post('/batch', async (req, res) => {
   }
 });
 
-router.get('/report', async (req, res) => {
+router.get('/report', teacherAuth, async (req, res) => {
   try {
     const { courseId, semester } = req.query;
     let sql = `SELECT s.id as student_id, s.name as student_name, s.reg_id,

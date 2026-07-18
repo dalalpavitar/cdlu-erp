@@ -3,7 +3,7 @@ function checkAuth() {
   var role = localStorage.getItem('cdluRole');
   var name = localStorage.getItem('cdluName');
   if (!token) return null;
-  return { token: token, role: role, name: name };
+  return { token: token, role: role, name: name, id: localStorage.getItem('cdluId'), regId: localStorage.getItem('cdluRegId') };
 }
 
 function requireAuth(roles) {

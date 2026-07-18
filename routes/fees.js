@@ -1,10 +1,16 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../config/db');
+const { optionalAuth, teacherAuth } = require('../middleware/auth');
 
-router.get('/', async (req, res) => {
+router.get('/', optionalAuth, async (req, res) => {
   try {
-    const { status, semester, studentId } = req.query;
+    let { status, semester, studentId, regId } = req.query;
+    // Student can only see their own fees
+    if (req.user && req.user.role === 'student') {
+      regId = req.user.regId;
+      studentId = null;
+    }
     let sql = `SELECT f.*, s.name as student_name, s.reg_id, s.phone
                FROM fees f
                JOIN students s ON f.student_id = s.id
@@ -13,6 +19,7 @@ router.get('/', async (req, res) => {
     if (status) { sql += ` AND f.status = ?`; params.push(status); }
     if (semester) { sql += ` AND f.semester = ?`; params.push(semester); }
     if (studentId) { sql += ` AND f.student_id = ?`; params.push(studentId); }
+    if (regId) { sql += ` AND s.reg_id = ?`; params.push(regId); }
     sql += ` ORDER BY f.due_date DESC`;
     const [rows] = await db.query(sql, params);
     res.json(rows);
@@ -22,7 +29,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.post('/', async (req, res) => {
+router.post('/', teacherAuth, async (req, res) => {
   try {
     const { studentId, semester, totalFees, paidAmount, dueDate, paymentMode } = req.body;
     if (!studentId || !semester || !totalFees) {
@@ -42,7 +49,7 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', teacherAuth, async (req, res) => {
   try {
     const { paidAmount, paymentMode } = req.body;
     const [fee] = await db.query('SELECT * FROM fees WHERE id = ?', [req.params.id]);
@@ -60,7 +67,7 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-router.get('/due', async (req, res) => {
+router.get('/due', teacherAuth, async (req, res) => {
   try {
     const [rows] = await db.query(
       `SELECT f.*, s.name as student_name, s.reg_id, s.phone, s.program_id,
@@ -77,7 +84,7 @@ router.get('/due', async (req, res) => {
   }
 });
 
-router.get('/statistics', async (req, res) => {
+router.get('/statistics', teacherAuth, async (req, res) => {
   try {
     const [rows] = await db.query(
       `SELECT

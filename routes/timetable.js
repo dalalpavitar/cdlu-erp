@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../config/db');
+const { teacherAuth } = require('../middleware/auth');
 
 router.get('/', async (req, res) => {
   try {
@@ -25,7 +26,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.post('/', async (req, res) => {
+router.post('/', teacherAuth, async (req, res) => {
   try {
     const { courseId, teacherId, day, startTime, endTime, room, semester } = req.body;
     if (!courseId || !day || !startTime || !endTime) {
@@ -42,7 +43,7 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', teacherAuth, async (req, res) => {
   try {
     await db.query('DELETE FROM timetable WHERE id = ?', [req.params.id]);
     res.json({ success: true });

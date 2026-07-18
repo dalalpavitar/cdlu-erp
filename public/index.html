@@ -1,260 +1,539 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chaudhary Devi Lal University | CDLU Sirsa</title>
-  <link rel="stylesheet" href="css/style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chaudhary Devi Lal University | CDLU Sirsa - Official Website</title>
+<meta name="description" content="Official website of Chaudhary Devi Lal University, Sirsa. A premier state university in Haryana offering UG, PG, diploma, and PhD programmes across 24 departments.">
+<meta name="keywords" content="CDLU, Chaudhary Devi Lal University, Sirsa, Haryana, University, Education">
+<meta property="og:title" content="Chaudhary Devi Lal University | CDLU Sirsa">
+<meta property="og:description" content="Official website of Chaudhary Devi Lal University, Sirsa. Premier state university in Haryana.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://cdlu-erp-production.up.railway.app">
+<link rel="icon" href="images/favicon.ico" type="image/x-icon">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="css/style.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CollegeOrUniversity",
+  "name": "Chaudhary Devi Lal University",
+  "alternateName": "CDLU Sirsa",
+  "url": "https://cdlu-erp-production.up.railway.app",
+  "logo": "https://cdlu-erp-production.up.railway.app/images/cdlu-logo.png",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Barnala Road",
+    "addressLocality": "Sirsa",
+    "addressRegion": "Haryana",
+    "postalCode": "125055",
+    "addressCountry": "IN"
+  },
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "+91-1666-247049",
+    "contactType": "registrar",
+    "email": "registrarcdlu@cdlu.ac.in"
+  },
+  "foundingDate": "2003",
+  "founder": { "@type": "Person", "name": "Chaudhary Devi Lal" }
+}
+</script>
 </head>
 <body>
 
-  <div class="top-bar">
-    <div class="container">
-      <span>Shraddhavan Labhate Gyanam | श्रद्धावान लभते ज्ञानं</span>
-      <span>
-        <a href="https://www.cdlu.ac.in" target="_blank">Official Website</a>
-        <a href="contact.html">Contact</a>
+<!-- Top Bar -->
+<div class="top-bar">
+  <div class="container">
+    <div class="top-bar-left">
+      <span>श्रद्धावान लभते ज्ञानं — The Deserving Attain Knowledge</span>
+    </div>
+    <div class="top-bar-right">
+      <span class="visitor-count"><i class="fas fa-eye"></i> Visitors: <strong id="visitorCount">0</strong></span>
+      <span class="separator">|</span>
+      <a href="https://webmail.cdlu.ac.in" target="_blank"><i class="fas fa-envelope"></i> Webmail</a>
+      <span class="separator">|</span>
+      <a href="rti.html"><i class="fas fa-scale-balanced"></i> RTI</a>
+      <span class="separator">|</span>
+      <a href="syllabus.html"><i class="fas fa-book"></i> Syllabi</a>
+      <span class="separator">|</span>
+      <a href="sitemap.html"><i class="fas fa-sitemap"></i> Sitemap</a>
+      <span class="separator">|</span>
+      <span class="font-controls">
+        <button class="font-btn" data-action="decrease" title="Decrease font size">A-</button>
+        <button class="font-btn" data-action="reset" title="Reset font size">A</button>
+        <button class="font-btn" data-action="increase" title="Increase font size">A+</button>
       </span>
     </div>
   </div>
-
-  <header class="header">
-    <div class="container">
-      <a href="index.html" class="logo">
-        <div class="logo-icon">CDLU</div>
-        <div class="logo-text">
-          <h1>Chaudhary Devi Lal University</h1>
-          <span>Established by Act 9 of 2003 | Sirsa, Haryana</span>
+</div>
+<!-- Header -->
+<header class="header">
+  <div class="container">
+    <a href="index.html" class="logo">
+      <img src="images/cdlu-logo.png" alt="CDLU Logo" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+      <div class="logo-icon" style="display:none;">CDLU</div>
+      <div class="logo-text">
+        <h1>Chaudhary Devi Lal University</h1>
+        <span>Established by Act 9 of 2003 | Sirsa, Haryana</span>
+      </div>
+    </a>
+    <button class="hamburger" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav">
+      <li><a href="index.html" class="active">Home</a></li>
+      <li>
+        <a href="about.html">About <span class="dropdown-arrow">&#9662;</span></a>
+        <div class="dropdown-menu">
+          <a href="about.html">Introduction</a>
+          <a href="vc-message.html">Vice-Chancellor's Message</a>
+          <a href="registrar-message.html">Registrar's Message</a>
+          <a href="vision-mission.html">Vision &amp; Mission</a>
+          <a href="history.html">History &amp; Timeline</a>
+          <a href="leadership.html">University Leadership</a>
+          <a href="accreditation.html">Accreditations</a>
         </div>
-      </a>
-      <button class="hamburger" aria-label="Toggle menu">
-        <span></span><span></span><span></span>
-      </button>
-      <nav class="nav">
-        <a href="index.html" class="active">Home</a>
-        <a href="about.html">About</a>
-        <a href="academics.html">Academics</a>
-        <a href="admissions.html">Admissions</a>
-        <a href="registration.html">Registration</a>
-        <a href="contact.html">Contact</a>
-        <a href="dashboard.html" style="color:var(--saffron);font-weight:700">★ ERP</a>
-        <a href="admin.html">Admin</a>
-      </nav>
-    </div>
-  </header>
+      </li>
+      <li>
+        <a href="academics.html">Academics <span class="dropdown-arrow">&#9662;</span></a>
+        <div class="dropdown-menu">
+          <a href="academics.html">Programs (UG/PG/PhD)</a>
+          <a href="departments.html">Departments</a>
+          <a href="academic-calendar.html">Academic Calendar</a>
+          <a href="syllabus.html">Syllabus</a>
+        </div>
+      </li>
+      <li>
+        <a href="admissions.html">Admissions <span class="dropdown-arrow">&#9662;</span></a>
+        <div class="dropdown-menu">
+          <a href="ug-admissions.html">UG Admissions</a>
+          <a href="pg-admissions.html">PG Admissions</a>
+          <a href="phd-admissions.html">PhD Admissions</a>
+          <a href="fee-structure.html">Fee Structure</a>
+          <a href="eligibility.html">Eligibility Criteria</a>
+          <a href="scholarships.html">Scholarships</a>
+          <a href="registration.html">Online Registration</a>
+        </div>
+      </li>
+      <li>
+        <a href="examination.html">Examination <span class="dropdown-arrow">&#9662;</span></a>
+        <div class="dropdown-menu">
+          <a href="examination.html">Overview</a>
+          <a href="date-sheets.html">Date Sheets</a>
+          <a href="admit-card.html">Admit Card</a>
+          <a href="results.html">Results</a>
+          <a href="revaluation.html">Revaluation</a>
+        </div>
+      </li>
+      <li>
+        <a href="research.html">Research <span class="dropdown-arrow">&#9662;</span></a>
+        <div class="dropdown-menu">
+          <a href="research.html">Research Areas</a>
+          <a href="publications.html">Publications</a>
+          <a href="research-centers.html">Research Centers</a>
+          <a href="phd-programmes.html">PhD Programmes</a>
+        </div>
+      </li>
+      <li>
+        <a href="#">Campus Life <span class="dropdown-arrow">&#9662;</span></a>
+        <div class="dropdown-menu">
+          <a href="library.html">Library</a>
+          <a href="hostel.html">Hostels</a>
+          <a href="sports.html">Sports</a>
+          <a href="health-center.html">Health Center</a>
+          <a href="student-clubs.html">Student Clubs</a>
+          <a href="campus-tour.html">Campus Tour</a>
+          <a href="women-cell.html">Women Cell</a>
+          <a href="sc-st-cell.html">SC/ST Cell</a>
+        </div>
+      </li>
+      <li><a href="gallery.html">Gallery</a></li>
+      <li><a href="notices.html">Notices</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="login.html" class="nav-erp"><i class="fas fa-graduation-cap"></i> ERP Portal</a></li>
+    </ul>
+  </div>
+</header>
 
-  <section class="hero">
-    <div class="container">
-      <div class="hindi">&#2330;&#2370;&#2342;&#2364;&#2368; &#2342;&#2375;&#2357;&#2368; &#2354;&#2366;&#2354; &#2357;&#2367;&#2358;&#2381;&#2357;&#2357;&#2367;&#2342;&#2381;&#2351;&#2366;&#2354;&#2351;</div>
+<!-- Mobile Navigation -->
+<div class="mobile-nav-overlay"></div>
+<div class="mobile-nav">
+  <div class="mobile-nav-header">
+    <h3><i class="fas fa-university"></i> CDLU Menu</h3>
+    <button class="mobile-nav-close">&times;</button>
+  </div>
+  <ul class="mobile-nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li>
+      <a href="about.html">About <span class="mobile-submenu-toggle">+</span></a>
+      <div class="mobile-submenu">
+        <a href="about.html">Introduction</a>
+        <a href="vc-message.html">VC's Message</a>
+        <a href="registrar-message.html">Registrar's Message</a>
+        <a href="vision-mission.html">Vision & Mission</a>
+        <a href="history.html">History</a>
+        <a href="leadership.html">Leadership</a>
+        <a href="accreditation.html">Accreditations</a>
+      </div>
+    </li>
+    <li>
+      <a href="academics.html">Academics <span class="mobile-submenu-toggle">+</span></a>
+      <div class="mobile-submenu">
+        <a href="academics.html">Programs</a>
+        <a href="departments.html">Departments</a>
+        <a href="academic-calendar.html">Calendar</a>
+        <a href="syllabus.html">Syllabus</a>
+      </div>
+    </li>
+    <li>
+      <a href="admissions.html">Admissions <span class="mobile-submenu-toggle">+</span></a>
+      <div class="mobile-submenu">
+        <a href="ug-admissions.html">UG Admissions</a>
+        <a href="pg-admissions.html">PG Admissions</a>
+        <a href="phd-admissions.html">PhD Admissions</a>
+        <a href="fee-structure.html">Fee Structure</a>
+        <a href="eligibility.html">Eligibility</a>
+        <a href="scholarships.html">Scholarships</a>
+        <a href="registration.html">Online Registration</a>
+      </div>
+    </li>
+    <li>
+      <a href="examination.html">Examination <span class="mobile-submenu-toggle">+</span></a>
+      <div class="mobile-submenu">
+        <a href="examination.html">Overview</a>
+        <a href="date-sheets.html">Date Sheets</a>
+        <a href="admit-card.html">Admit Card</a>
+        <a href="results.html">Results</a>
+        <a href="revaluation.html">Revaluation</a>
+      </div>
+    </li>
+    <li>
+      <a href="research.html">Research <span class="mobile-submenu-toggle">+</span></a>
+      <div class="mobile-submenu">
+        <a href="research.html">Research Areas</a>
+        <a href="publications.html">Publications</a>
+        <a href="research-centers.html">Centers</a>
+        <a href="phd-programmes.html">PhD Programmes</a>
+      </div>
+    </li>
+    <li>
+      <a href="#">Campus Life <span class="mobile-submenu-toggle">+</span></a>
+      <div class="mobile-submenu">
+        <a href="library.html">Library</a>
+        <a href="hostel.html">Hostels</a>
+        <a href="sports.html">Sports</a>
+        <a href="health-center.html">Health Center</a>
+        <a href="student-clubs.html">Clubs</a>
+        <a href="campus-tour.html">Campus Tour</a>
+        <a href="women-cell.html">Women Cell</a>
+        <a href="sc-st-cell.html">SC/ST Cell</a>
+      </div>
+    </li>
+    <li><a href="gallery.html">Gallery</a></li>
+    <li><a href="notices.html">Notices</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="login.html" class="mobile-nav-erp"><i class="fas fa-graduation-cap"></i> ERP Portal</a></li>
+  </ul>
+</div>
+<!-- Hero Slider -->
+<section class="hero-slider">
+  <div class="hero-slide hero-slide-1 active">
+    <div class="hero-content">
+      <div class="hindi">चौधरी देवी लाल विश्वविद्यालय</div>
       <h1>Chaudhary Devi Lal University</h1>
-      <p class="motto">&#2358;&#2381;&#2352;&#2342;&#2381;&#2343;&#2366;&#2357;&#2366;&#2344; &#2354;&#2349;&#2340;&#2375; &#2332;&#2381;&#2334;&#2366;&#2344;&#2350;&#2381; &mdash; The Deserving Attain Knowledge</p>
-      <p>Empowering minds through quality higher education, research, and innovation since 2003. Spread across a sprawling 213-acre campus on Barnala Road, Sirsa.</p>
+      <p class="motto">श्रद्धावान लभते ज्ञानं — The Deserving Attain Knowledge</p>
+      <p>Empowering minds through quality higher education, research, and innovation since 2003. Spread across a sprawling 213-acre campus.</p>
       <div class="hero-buttons">
         <a href="admissions.html" class="btn btn-primary">Apply for Admission 2026-27</a>
         <a href="about.html" class="btn btn-outline">Explore CDLU</a>
       </div>
     </div>
-  </section>
+  </div>
+  <div class="hero-slide hero-slide-2">
+    <div class="hero-content">
+      <div class="hindi">गुणवत्तापूर्ण शिक्षा का केंद्र</div>
+      <h1>Center for Quality Education</h1>
+      <p class="motto">ज्ञानमूलक, मूल्यपरक व कौशलोन्मुखी शिक्षा</p>
+      <p>Offering 37+ academic programmes across UG, PG, diploma, and doctoral levels through 24 specialized teaching departments.</p>
+      <div class="hero-buttons">
+        <a href="academics.html" class="btn btn-primary">View Programmes</a>
+        <a href="registration.html" class="btn btn-outline">Register Online</a>
+      </div>
+    </div>
+  </div>
+  <div class="hero-slide hero-slide-3">
+    <div class="hero-content">
+      <div class="hindi">अनुसंधान एवं नवाचार</div>
+      <h1>Research &amp; Innovation Hub</h1>
+      <p class="motto">राष्ट्रीय ज्ञान नेटवर्क से जुड़ा परिसर</p>
+      <p>Connected to National Knowledge Network via 1 GBPS optical fiber. Active research across sciences, social sciences, and humanities.</p>
+      <div class="hero-buttons">
+        <a href="research.html" class="btn btn-primary">Research at CDLU</a>
+        <a href="gallery.html" class="btn btn-outline">Campus Gallery</a>
+      </div>
+    </div>
+  </div>
+  <div class="slider-dots">
+    <span class="slider-dot active"></span>
+    <span class="slider-dot"></span>
+    <span class="slider-dot"></span>
+  </div>
+</section>
+<!-- News Ticker -->
+<section class="news-ticker">
+  <div class="container">
+    <span class="ticker-label"><i class="fas fa-bullhorn"></i> Updates</span>
+    <div class="ticker-wrapper">
+      <div class="ticker-content">
+        <span class="ticker-item"><span class="ticker-priority urgent">Urgent</span> Admissions Open for 2026-27 — Apply Now</span>
+        <span class="ticker-item"><span class="ticker-priority important">Important</span> Exam Schedule for Even Semester Released</span>
+        <span class="ticker-item"><span class="ticker-priority normal">Notice</span> National Seminar on Renewable Energy - Aug 5</span>
+        <span class="ticker-item"><span class="ticker-priority urgent">Urgent</span> Fee Payment Deadline Extended to July 31</span>
+        <span class="ticker-item"><span class="ticker-priority normal">Notice</span> Cultural Fest Umang 2026 Registrations Open</span>
+        <!-- Duplicate for seamless scroll -->
+        <span class="ticker-item"><span class="ticker-priority urgent">Urgent</span> Admissions Open for 2026-27 — Apply Now</span>
+        <span class="ticker-item"><span class="ticker-priority important">Important</span> Exam Schedule for Even Semester Released</span>
+        <span class="ticker-item"><span class="ticker-priority normal">Notice</span> National Seminar on Renewable Energy - Aug 5</span>
+        <span class="ticker-item"><span class="ticker-priority urgent">Urgent</span> Fee Payment Deadline Extended to July 31</span>
+        <span class="ticker-item"><span class="ticker-priority normal">Notice</span> Cultural Fest Umang 2026 Registrations Open</span>
+      </div>
+    </div>
+  </div>
+</section>
 
-  <section class="stats">
-    <div class="container">
-      <div class="stats-grid">
-        <div class="stat-item">
-          <h3>42,000+</h3>
-          <p>Total Students Enrolled</p>
+<!-- VC & Registrar Messages -->
+<section class="section section-alt">
+  <div class="container">
+    <h2 class="section-title">From the Leaders' Desk</h2>
+    <p class="section-subtitle">Messages from our Vice-Chancellor and Registrar</p>
+    <div class="leadership-messages">
+      <div class="leader-card">
+        <div class="leader-photo"><i class="fas fa-user-tie"></i></div>
+        <div class="leader-info">
+          <h3>Prof. (Dr.) Vice-Chancellor</h3>
+          <div class="designation">Vice-Chancellor, CDLU Sirsa</div>
+          <p class="message-preview">Welcome to Chaudhary Devi Lal University, a centre of excellence in higher education. Our university is committed to providing quality education that nurtures intellectual growth, research aptitude, and holistic development...</p>
+          <a href="vc-message.html" class="read-more">Read Full Message <i class="fas fa-arrow-right"></i></a>
         </div>
-        <div class="stat-item">
-          <h3>24</h3>
-          <p>Teaching Departments</p>
-        </div>
-        <div class="stat-item">
-          <h3>62+</h3>
-          <p>Affiliated Colleges</p>
-        </div>
-        <div class="stat-item">
-          <h3>213</h3>
-          <p>Acre Campus</p>
+      </div>
+      <div class="leader-card">
+        <div class="leader-photo"><i class="fas fa-user-tie"></i></div>
+        <div class="leader-info">
+          <h3>Dr. Registrar</h3>
+          <div class="designation">Registrar, CDLU Sirsa</div>
+          <p class="message-preview">It gives me immense pleasure to welcome you to Chaudhary Devi Lal University. As the Registrar, I assure you of our commitment to transparent administration and student-centric services...</p>
+          <a href="registrar-message.html" class="read-more">Read Full Message <i class="fas fa-arrow-right"></i></a>
         </div>
       </div>
     </div>
-  </section>
-
-  <section class="section">
-    <div class="container">
-      <h2 class="section-title">Welcome to CDLU</h2>
-      <p class="section-subtitle">Chaudhary Devi Lal University is a premier state university in Sirsa, Haryana, committed to academic excellence and holistic development.</p>
-      <div class="cards-grid">
-        <div class="card">
-          <div class="card-icon blue">&#127891;</div>
-          <h3>Quality Education</h3>
-          <p>Offering 37+ academic programmes across UG, PG, diploma, and doctoral levels through 24 specialized teaching departments.</p>
-        </div>
-        <div class="card">
-          <div class="card-icon gold">&#128218;</div>
-          <h3>Diverse Programs</h3>
-          <p>Programmes in Science, Arts, Commerce, Law, Engineering, Management, Education, Journalism, and more under one roof.</p>
-        </div>
-        <div class="card">
-          <div class="card-icon green">&#127758;</div>
-          <h3>Sprawling Campus</h3>
-          <p>A 213-acre campus with modern infrastructure including 4 teaching blocks, Vivekananda Library, hostels, and sports facilities.</p>
-        </div>
-        <div class="card">
-          <div class="card-icon blue">&#128300;</div>
-          <h3>Research &amp; Innovation</h3>
-          <p>Connected to National Knowledge Network via 1 GBPS optical fiber. Active research across sciences, social sciences, and humanities.</p>
-        </div>
-        <div class="card">
-          <div class="card-icon gold">&#127979;</div>
-          <h3>Campus Facilities</h3>
-          <p>Wi-Fi campus, well-equipped labs, health centre, bank with ATM, shopping complex, and community radio station.</p>
-        </div>
-        <div class="card">
-          <div class="card-icon green">&#127942;</div>
-          <h3>UGC Recognized</h3>
-          <p>Recognized by UGC under Section 12(B) and accredited for central assistance. Affiliated with 62+ colleges across the region.</p>
-        </div>
+  </div>
+</section>
+<!-- Stats Counter -->
+<section class="stats-bar">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-item">
+        <div class="stat-icon"><i class="fas fa-users"></i></div>
+        <h3>42,000+</h3>
+        <p>Students Enrolled</p>
+      </div>
+      <div class="stat-item">
+        <div class="stat-icon"><i class="fas fa-building"></i></div>
+        <h3>24</h3>
+        <p>Departments</p>
+      </div>
+      <div class="stat-item">
+        <div class="stat-icon"><i class="fas fa-school"></i></div>
+        <h3>62+</h3>
+        <p>Affiliated Colleges</p>
+      </div>
+      <div class="stat-item">
+        <div class="stat-icon"><i class="fas fa-tree"></i></div>
+        <h3>213</h3>
+        <p>Acre Campus</p>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <section class="section section-alt">
-    <div class="container">
-      <h2 class="section-title">Latest News</h2>
-      <p class="section-subtitle">Stay informed about the latest developments at Chaudhary Devi Lal University.</p>
-      <div class="news-grid">
-        <article class="news-card">
-          <div class="news-img">&#128200;</div>
-          <div class="news-body">
-            <div class="news-date">June 2026</div>
-            <h4>Admissions Open for 2026-27 Academic Session</h4>
-            <p>Online applications are now being accepted for UG, PG, diploma, and PhD programmes. Apply through the university portal.</p>
-          </div>
-        </article>
-        <article class="news-card">
-          <div class="news-img">&#127891;</div>
-          <div class="news-body">
-            <div class="news-date">May 2026</div>
-            <h4>CDLU Faculty Among World's Top Scientists</h4>
-            <p>Two CDLU faculty members have been recognized among the world's top scientists for their research contributions.</p>
-          </div>
-        </article>
-        <article class="news-card">
-          <div class="news-img">&#127775;</div>
-          <div class="news-body">
-            <div class="news-date">April 2026</div>
-            <h4>New Teaching Block Inaugurated</h4>
-            <p>Teaching Block IV (Dr. APJ Abdul Kalam Bhawan) inaugurated with state-of-the-art classrooms and seminar halls.</p>
-          </div>
-        </article>
-        <article class="news-card">
-          <div class="news-img">&#127942;</div>
-          <div class="news-body">
-            <div class="news-date">March 2026</div>
-            <h4>National Conference on NEP 2020</h4>
-            <p>CDLU hosted a national conference on the implementation of National Education Policy 2020 in higher education.</p>
-          </div>
-        </article>
+<!-- Notice Board + Quick Links -->
+<section class="section">
+  <div class="container">
+    <h2 class="section-title">Notice Board</h2>
+    <p class="section-subtitle">Latest announcements and circulars from the university</p>
+    <div class="notice-board">
+      <div class="notice-board-header">
+        <h3><i class="fas fa-bullhorn" style="color:var(--saffron);"></i> Latest Notices</h3>
+        <a href="notices.html">View All <i class="fas fa-arrow-right"></i></a>
+      </div>
+      <div id="noticeBoard"></div>
+    </div>
+  </div>
+</section>
+
+<!-- Quick Links -->
+<section class="section section-alt">
+  <div class="container">
+    <h2 class="section-title">Quick Links</h2>
+    <p class="section-subtitle">Essential resources and services at your fingertips</p>
+    <div class="quick-links-grid">
+      <a href="admissions.html" class="quick-link">
+        <div class="quick-link-icon blue"><i class="fas fa-file-pen"></i></div>
+        <span>Online Admission</span>
+      </a>
+      <a href="examination.html" class="quick-link">
+        <div class="quick-link-icon gold"><i class="fas fa-pen-to-square"></i></div>
+        <span>Examination</span>
+      </a>
+      <a href="results.html" class="quick-link">
+        <div class="quick-link-icon green"><i class="fas fa-file-lines"></i></div>
+        <span>Results</span>
+      </a>
+      <a href="login.html" class="quick-link">
+        <div class="quick-link-icon red"><i class="fas fa-graduation-cap"></i></div>
+        <span>Student Portal (ERP)</span>
+      </a>
+      <a href="library.html" class="quick-link">
+        <div class="quick-link-icon purple"><i class="fas fa-book-open-reader"></i></div>
+        <span>Library</span>
+      </a>
+      <a href="nirf.html" class="quick-link">
+        <div class="quick-link-icon teal"><i class="fas fa-chart-line"></i></div>
+        <span>NIRF</span>
+      </a>
+      <a href="naac.html" class="quick-link">
+        <div class="quick-link-icon blue"><i class="fas fa-award"></i></div>
+        <span>NAAC</span>
+      </a>
+      <a href="rti.html" class="quick-link">
+        <div class="quick-link-icon gold"><i class="fas fa-scale-balanced"></i></div>
+        <span>RTI Act</span>
+      </a>
+    </div>
+  </div>
+</section>
+<!-- Photo Gallery -->
+<section class="section">
+  <div class="container">
+    <h2 class="section-title">Photo Gallery</h2>
+    <p class="section-subtitle">Glimpses of campus life, events, and infrastructure</p>
+    <div class="gallery-grid">
+      <div class="gallery-item" data-lightbox>
+        <img src="images/hero-bg.jpg" alt="CDLU Campus" loading="lazy">
+        <div class="gallery-overlay"><span>CDLU Main Campus</span></div>
+      </div>
+      <div class="gallery-item" data-lightbox>
+        <div style="width:100%;height:100%;background:linear-gradient(135deg,var(--navy-light),var(--navy));display:flex;align-items:center;justify-content:center;color:var(--saffron);font-size:3rem;"><i class="fas fa-landmark"></i></div>
+        <div class="gallery-overlay"><span>Administrative Block</span></div>
+      </div>
+      <div class="gallery-item" data-lightbox>
+        <div style="width:100%;height:100%;background:linear-gradient(135deg,#2C3E6B,#1B2A4A);display:flex;align-items:center;justify-content:center;color:var(--saffron);font-size:3rem;"><i class="fas fa-book-open"></i></div>
+        <div class="gallery-overlay"><span>Vivekananda Library</span></div>
+      </div>
+      <div class="gallery-item" data-lightbox>
+        <div style="width:100%;height:100%;background:linear-gradient(135deg,#1B2A4A,#0f1d3a);display:flex;align-items:center;justify-content:center;color:var(--saffron);font-size:3rem;"><i class="fas fa-flask"></i></div>
+        <div class="gallery-overlay"><span>Science Labs</span></div>
       </div>
     </div>
-  </section>
+    <div style="text-align:center;margin-top:25px;">
+      <a href="gallery.html" class="btn btn-primary">View Full Gallery <i class="fas fa-arrow-right"></i></a>
+    </div>
+  </div>
+</section>
 
-  <section class="section">
-    <div class="container">
-      <h2 class="section-title">Upcoming Events</h2>
-      <p class="section-subtitle">Mark your calendar for these important events at CDLU.</p>
-      <div class="events-list">
-        <div class="event-item">
-          <div class="event-date">
-            <span class="day">15</span>
-            <span class="month">Jul</span>
-          </div>
-          <div class="event-info">
-            <h4>Online Admission Counselling 2026-27</h4>
-            <p>Virtual counselling session for prospective students. Get guidance on programmes, fee structure, and application process.</p>
-          </div>
-        </div>
-        <div class="event-item">
-          <div class="event-date">
-            <span class="day">05</span>
-            <span class="month">Aug</span>
-          </div>
-          <div class="event-info">
-            <h4>National Seminar on Renewable Energy</h4>
-            <p>Two-day national seminar organized by the Department of Energy & Environmental Sciences.</p>
-          </div>
-        </div>
-        <div class="event-item">
-          <div class="event-date">
-            <span class="day">20</span>
-            <span class="month">Aug</span>
-          </div>
-          <div class="event-info">
-            <h4>Cultural Fest - Umang 2026</h4>
-            <p>Annual inter-college cultural festival featuring music, dance, drama, and literary competitions.</p>
-          </div>
-        </div>
-        <div class="event-item">
-          <div class="event-date">
-            <span class="day">01</span>
-            <span class="month">Sep</span>
-          </div>
-          <div class="event-info">
-            <h4>Commencement of Academic Session</h4>
-            <p>Classes begin for the 2026-27 academic year. Orientation programme for new students.</p>
-          </div>
-        </div>
+<!-- Events -->
+<section class="section section-alt">
+  <div class="container">
+    <h2 class="section-title">Upcoming Events</h2>
+    <p class="section-subtitle">Mark your calendar for important events and deadlines</p>
+    <div id="eventsList" class="events-list"></div>
+  </div>
+</section>
+
+<!-- About Preview -->
+<section class="section">
+  <div class="container">
+    <div class="two-col">
+      <div class="col-image"><i class="fas fa-university"></i></div>
+      <div>
+        <h2 style="color:var(--navy);font-size:1.8rem;margin-bottom:15px;">About the University</h2>
+        <p style="margin-bottom:14px;color:var(--text-light);font-size:0.95rem;line-height:1.8;">Chaudhary Devi Lal University (CDLU), Sirsa, is a premier state university established by the Government of Haryana under Act 9 of 2003. Named after Jan Nayak Chaudhary Devi Lal, former Deputy Prime Minister of India, the university is recognized by UGC under Section 12(B) and is spread across a sprawling 213-acre campus.</p>
+        <p style="margin-bottom:14px;color:var(--text-light);font-size:0.95rem;line-height:1.8;">With 24 teaching departments, 62+ affiliated colleges, and 37+ academic programmes, CDLU is committed to providing quality education and fostering research and innovation.</p>
+        <a href="about.html" class="btn btn-primary">Know More <i class="fas fa-arrow-right"></i></a>
       </div>
     </div>
-  </section>
-
-  <footer class="footer">
-    <div class="container">
-      <div class="footer-grid">
-        <div class="footer-about">
-          <h3><span class="logo-icon" style="width:36px;height:36px;font-size:0.55rem;">CDLU</span> Chaudhary Devi Lal University</h3>
-          <p>Established by the Government of Haryana under Act 9 of 2003. Named after Jan Nayak Chaudhary Devi Lal, former Deputy Prime Minister of India. Recognized by UGC under Section 12(B).</p>
-        </div>
-        <div>
-          <h4>Quick Links</h4>
-          <ul class="footer-links">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="about.html">About CDLU</a></li>
-            <li><a href="academics.html">Academics</a></li>
-            <li><a href="admissions.html">Admissions</a></li>
-            <li><a href="registration.html">Registration</a></li>
-            <li><a href="contact.html">Contact</a></li>
-          </ul>
-        </div>
-        <div>
-          <h4>Important Links</h4>
-          <ul class="footer-links">
-            <li><a href="#">Examination Portal</a></li>
-            <li><a href="#">Online Admission</a></li>
-            <li><a href="#">Result Portal</a></li>
-            <li><a href="#">RTI Act</a></li>
-            <li><a href="#">NIRF</a></li>
-            <li><a href="admin.html">Admin Panel</a></li>
-          </ul>
-        </div>
-        <div>
-          <h4>Contact</h4>
-          <ul class="footer-links">
-            <li>Barnala Road, Sirsa</li>
-            <li>Haryana - 125055, India</li>
-            <li>01666-247049</li>
-            <li>registrarcdlu@cdlu.ac.in</li>
-          </ul>
+  </div>
+</section>
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-about">
+        <h3><img src="images/cdlu-logo.png" alt="" style="height:36px;width:auto;" onerror="this.style.display='none'"> Chaudhary Devi Lal University</h3>
+        <p>Established by the Government of Haryana under Act 9 of 2003. Named after Jan Nayak Chaudhary Devi Lal, former Deputy Prime Minister of India. Recognized by UGC under Section 12(B). Spread across a 213-acre campus on Barnala Road, Sirsa.</p>
+        <div class="footer-social">
+          <a href="https://facebook.com" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="https://twitter.com" target="_blank" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+          <a href="https://instagram.com" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="https://youtube.com" target="_blank" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+          <a href="https://linkedin.com" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
         </div>
       </div>
-      <div class="footer-bottom">
-        <p>&copy; 2026 Chaudhary Devi Lal University, Sirsa. All rights reserved.</p>
+      <div>
+        <h4>Quick Links</h4>
+        <ul class="footer-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About University</a></li>
+          <li><a href="academics.html">Academics</a></li>
+          <li><a href="admissions.html">Admissions</a></li>
+          <li><a href="registration.html">Online Registration</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Resources</h4>
+        <ul class="footer-links">
+          <li><a href="examination.html">Examination Portal</a></li>
+          <li><a href="results.html">Result Portal</a></li>
+          <li><a href="library.html">E-Library</a></li>
+          <li><a href="nirf.html">NIRF</a></li>
+          <li><a href="naac.html">NAAC</a></li>
+          <li><a href="rti.html">RTI Act</a></li>
+          <li><a href="iqac.html">IQAC</a></li>
+          <li><a href="tenders.html">Tenders</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contact Us</h4>
+        <ul class="footer-contact">
+          <li><i class="fas fa-map-marker-alt"></i> Barnala Road, Sirsa, Haryana - 125055</li>
+          <li><i class="fas fa-phone"></i> +91-1666-247049</li>
+          <li><i class="fas fa-envelope"></i> registrarcdlu@cdlu.ac.in</li>
+          <li><i class="fas fa-globe"></i> www.cdlu.ac.in</li>
+        </ul>
       </div>
     </div>
-  </footer>
+    <div class="footer-bottom">
+      <span>&copy; 2026 Chaudhary Devi Lal University, Sirsa. All Rights Reserved.</span>
+      <span>Visitors: <strong class="visitor-count">0</strong> | <a href="sitemap.html">Sitemap</a> | <a href="privacy-policy.html">Privacy Policy</a> | <a href="terms.html">Terms</a></span>
+    </div>
+  </div>
+</footer>
 
-  <button class="back-to-top" aria-label="Back to top">&#8593;</button>
+<!-- Back to Top -->
+<button class="back-to-top" aria-label="Back to top"><i class="fas fa-arrow-up"></i></button>
 
-  <script src="js/script.js"></script>
+<!-- Lightbox -->
+<div class="lightbox">
+  <button class="lightbox-close">&times;</button>
+  <img src="" alt="Gallery Image">
+</div>
+
+<!-- Scripts -->
+<script src="js/script.js"></script>
 </body>
 </html>

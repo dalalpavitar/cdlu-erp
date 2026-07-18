@@ -1,149 +1,153 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Panel | CDLU Sirsa</title>
-  <link rel="stylesheet" href="css/style.css">
-</head>
-<body>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Admin Panel | CDLU ERP</title><link rel="icon" href="images/favicon.ico"><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"><link rel="stylesheet" href="css/style.css">
+<style>
+.admin-section{display:none;margin-top:20px;}
+.admin-section.active{display:block;}
+.admin-table{width:100%;border-collapse:collapse;margin:15px 0;font-size:0.85rem;}
+.admin-table th{background:var(--navy);color:var(--white);padding:10px;text-align:left;}
+.admin-table td{padding:10px;border-bottom:1px solid var(--border);}
+.admin-table tr:nth-child(even){background:var(--bg-light);}
+.admin-table tr:hover{background:var(--saffron-light);}
+.section-back{cursor:pointer;color:var(--saffron);font-weight:600;font-size:0.85rem;margin-bottom:15px;display:inline-block;}
+.section-back:hover{color:var(--saffron-dark);}
+</style></head>
+<body><div class="top-bar"><div class="container"><div class="top-bar-left"><span>श्रद्धावान लभते ज्ञानं</span></div><div class="top-bar-right"><span id="userInfo" style="margin-right:15px;"></span><a href="logout.html">Logout</a></div></div></div>
+<header class="header"><div class="container"><a href="index.html" class="logo"><img src="images/cdlu-logo.png" alt="CDLU"><div class="logo-text"><h1>CDLU ERP Portal</h1><span>Integrated University Management System</span></div></a></div></header>
+<div class="erp-layout"><div class="erp-sidebar"><h3>Main Menu</h3><ul class="erp-nav"><li><a href="dashboard.html"><i class="fas fa-home"></i> Dashboard</a></li><li><a href="attendance.html"><i class="fas fa-calendar-check"></i> Attendance</a></li><li><a href="fees.html"><i class="fas fa-money-bill"></i> Fees</a></li><li><a href="results-entry.html"><i class="fas fa-file-lines"></i> Results</a></li><li><a href="timetable.html"><i class="fas fa-table"></i> Timetable</a></li><li><a href="notices-erp.html"><i class="fas fa-bullhorn"></i> Notices</a></li><li><a href="admin.html" class="active"><i class="fas fa-cogs"></i> Admin</a></li><li><a href="index.html"><i class="fas fa-globe"></i> Back to Site</a></li></ul></div>
+<div class="erp-content">
+<div id="mainMenu">
+<h1>Admin Panel</h1>
+<div class="cards-grid" id="adminCards">
+<div class="card" data-section="students"><div class="card-icon blue"><i class="fas fa-users"></i></div><h3>Manage Students</h3><p>Add, edit, view student records</p></div>
+<div class="card" data-section="teachers"><div class="card-icon gold"><i class="fas fa-chalkboard-user"></i></div><h3>Manage Teachers</h3><p>Faculty management</p></div>
+<div class="card" data-section="courses"><div class="card-icon green"><i class="fas fa-book"></i></div><h3>Manage Courses</h3><p>Course and subject management</p></div>
+<div class="card" data-section="departments"><div class="card-icon saffron"><i class="fas fa-building-columns"></i></div><h3>Manage Departments</h3><p>Department administration</p></div>
+<div class="card" data-section="events"><div class="card-icon blue"><i class="fas fa-calendar"></i></div><h3>Manage Events</h3><p>University events calendar</p></div>
+<div class="card" data-section="gallery"><div class="card-icon gold"><i class="fas fa-images"></i></div><h3>Manage Gallery</h3><p>Photo gallery management</p></div>
+<div class="card" data-section="downloads"><div class="card-icon green"><i class="fas fa-download"></i></div><h3>Manage Downloads</h3><p>Document management</p></div>
+<div class="card" data-section="notices"><div class="card-icon saffron"><i class="fas fa-newspaper"></i></div><h3>Manage Notices</h3><p>Notice board management</p></div></div></div>
 
-  <div class="top-bar">
-    <div class="container">
-      <span>Shraddhavan Labhate Gyanam | श्रद्धावान लभते ज्ञानं</span>
-      <span><a href="index.html">Back to Website</a></span>
-    </div>
-  </div>
+<div id="section-students" class="admin-section"><a class="section-back" onclick="showMain()"><i class="fas fa-arrow-left"></i> Back to Admin Panel</a><h2>Manage Students</h2><div id="studentsContent">Loading...</div></div>
+<div id="section-teachers" class="admin-section"><a class="section-back" onclick="showMain()"><i class="fas fa-arrow-left"></i> Back to Admin Panel</a><h2>Manage Teachers</h2><div id="teachersContent">Loading...</div></div>
+<div id="section-courses" class="admin-section"><a class="section-back" onclick="showMain()"><i class="fas fa-arrow-left"></i> Back to Admin Panel</a><h2>Manage Courses</h2><div id="coursesContent">Loading...</div></div>
+<div id="section-departments" class="admin-section"><a class="section-back" onclick="showMain()"><i class="fas fa-arrow-left"></i> Back to Admin Panel</a><h2>Manage Departments</h2><div id="departmentsContent">Loading...</div></div>
+<div id="section-events" class="admin-section"><a class="section-back" onclick="showMain()"><i class="fas fa-arrow-left"></i> Back to Admin Panel</a><h2>Manage Events</h2><div id="eventsContent">Loading...</div></div>
+<div id="section-gallery" class="admin-section"><a class="section-back" onclick="showMain()"><i class="fas fa-arrow-left"></i> Back to Admin Panel</a><h2>Manage Gallery</h2><div id="galleryContent">Loading...</div></div>
+<div id="section-downloads" class="admin-section"><a class="section-back" onclick="showMain()"><i class="fas fa-arrow-left"></i> Back to Admin Panel</a><h2>Manage Downloads</h2><div id="downloadsContent">Loading...</div></div>
+<div id="section-notices" class="admin-section"><a class="section-back" onclick="showMain()"><i class="fas fa-arrow-left"></i> Back to Admin Panel</a><h2>Manage Notices</h2><div id="noticesContent">Loading...</div></div>
+</div></div>
+<footer class="footer"><div class="container"><div class="footer-bottom"><span>&copy; 2026 CDLU ERP Portal</span></div></div></footer>
+<script src="js/api.js"></script><script src="js/auth.js"></script><script src="js/script.js"></script>
+<script>
+function showMain(){document.querySelectorAll('.admin-section').forEach(function(s){s.classList.remove('active')});document.getElementById('mainMenu').style.display='block';}
+function showSection(id){document.getElementById('mainMenu').style.display='none';document.querySelectorAll('.admin-section').forEach(function(s){s.classList.remove('active')});document.getElementById('section-'+id).classList.add('active');loadSection(id);}
+function makeTable(headers,rows,keys){var h='<table class="admin-table"><tr>'+headers.map(function(hh){return'<th>'+hh+'</th>'}).join('')+'</tr>';rows.forEach(function(r,i){h+='<tr>';keys.forEach(function(k){h+='<td>'+(r[k]||'-')+'</td>'});h+='</tr>'});h+='</table>';return h;}
 
-  <header class="header">
-    <div class="container">
-      <a href="index.html" class="logo">
-        <div class="logo-icon">CDLU</div>
-        <div class="logo-text">
-          <h1>Chaudhary Devi Lal University</h1>
-          <span>Admin Panel - Student Registration Dashboard</span>
-        </div>
-      </a>
-      <nav class="nav">
-        <a href="index.html">Home</a>
-        <a href="registration.html">Registration</a>
-        <a href="dashboard.html">★ ERP</a>
-        <a href="admin.html" class="active">Admin</a>
-      </nav>
-    </div>
-  </header>
+async function loadSection(id){
+  var el=document.getElementById(id+'Content');
+  try{
+    var data=await API.get('/'+id);
+    if(!data||data.length===0){el.innerHTML='<p style="color:var(--text-light);">No records found.</p>';return;}
+    var table='';
+    if(id==='students'){
+      table=makeTable(['ID','Reg ID','Name','Father Name','Phone','Email','Program','Semester','Gender','Category'],[],[]);
+      table='<table class="admin-table"><tr><th>ID</th><th>Reg ID</th><th>Name</th><th>Father Name</th><th>Phone</th><th>Email</th><th>Program</th><th>Semester</th><th>Gender</th></tr>';
+      data.forEach(function(r,i){
+        table+='<tr><td>'+r.id+'</td><td>'+(r.reg_id||'-')+'</td><td>'+(r.name||'-')+'</td><td>'+(r.father_name||'-')+'</td><td>'+(r.phone||'-')+'</td><td>'+(r.email||'-')+'</td><td>'+(r.program_name||'-')+'</td><td>'+(r.semester||'-')+'</td><td>'+(r.gender||'-')+'</td></tr>';
+      });
+      table+='</table>';
+    }else if(id==='teachers'){
+      table='<table class="admin-table"><tr><th>ID</th><th>Name</th><th>Email</th><th>Designation</th><th>Department</th><th>Phone</th></tr>';
+      data.forEach(function(r,i){
+        table+='<tr><td>'+r.id+'</td><td>'+(r.name||'-')+'</td><td>'+(r.email||'-')+'</td><td>'+(r.designation||'-')+'</td><td>'+(r.department_name||r.department_id||'-')+'</td><td>'+(r.phone||'-')+'</td></tr>';
+      });
+      table+='</table>';
+      table+='<hr style="margin:30px 0"><h3>Register New Teacher</h3>';
+      table+='<div style="max-width:500px"><div class="form-group"><label>Full Name *</label><input id="tName" class="form-control" placeholder="Dr. Name"></div>';
+      table+='<div class="form-group"><label>Email *</label><input id="tEmail" class="form-control" type="email" placeholder="teacher@cdlu.ac.in"></div>';
+      table+='<div class="form-group"><label>Password *</label><input id="tPass" class="form-control" type="password" placeholder="Set password"></div>';
+      table+='<div class="form-group"><label>Department</label><select id="tDept" class="form-control"><option value="">-- Select --</option></select></div>';
+      table+='<div class="form-group"><label>Qualification</label><input id="tQual" class="form-control" placeholder="Ph.D., M.Tech, etc."></div>';
+      table+='<div class="form-group"><label>Phone</label><input id="tPhone" class="form-control" placeholder="9999999999"></div>';
+      table+='<button class="btn btn-primary" onclick="registerTeacher()">Register Teacher</button><span id="tMsg" style="margin-left:15px;"></span></div>';
+      setTimeout(loadDeptDropdown,100);
+    }else if(id==='courses'){
+      table='<table class="admin-table"><tr><th>ID</th><th>Name</th><th>Code</th><th>Department</th><th>Semester</th><th>Credits</th></tr>';
+      data.forEach(function(r,i){
+        table+='<tr><td>'+r.id+'</td><td>'+(r.name||'-')+'</td><td>'+(r.code||'-')+'</td><td>'+(r.department_id||'-')+'</td><td>'+(r.semester||'-')+'</td><td>'+(r.credits||'-')+'</td></tr>';
+      });
+      table+='</table>';
+    }else if(id==='departments'){
+      table='<table class="admin-table"><tr><th>ID</th><th>Name</th><th>Code</th><th>Faculty</th></tr>';
+      data.forEach(function(r,i){
+        table+='<tr><td>'+r.id+'</td><td>'+(r.name||'-')+'</td><td>'+(r.code||'-')+'</td><td>'+(r.faculty||'-')+'</td></tr>';
+      });
+      table+='</table>';
+    }else if(id==='events'){
+      table='<table class="admin-table"><tr><th>ID</th><th>Title</th><th>Date</th><th>Location</th><th>Category</th></tr>';
+      data.forEach(function(r,i){
+        table+='<tr><td>'+r.id+'</td><td>'+(r.title||'-')+'</td><td>'+(r.event_date||'-')+'</td><td>'+(r.location||'-')+'</td><td>'+(r.category||'-')+'</td></tr>';
+      });
+      table+='</table>';
+    }else if(id==='gallery'){
+      table='<table class="admin-table"><tr><th>ID</th><th>Title</th><th>Category</th><th>Type</th></tr>';
+      data.forEach(function(r,i){
+        table+='<tr><td>'+r.id+'</td><td>'+(r.title||'-')+'</td><td>'+(r.category||'-')+'</td><td>'+(r.media_type||'-')+'</td></tr>';
+      });
+      table+='</table>';
+    }else if(id==='downloads'){
+      table='<table class="admin-table"><tr><th>ID</th><th>Title</th><th>Category</th><th>Size</th></tr>';
+      data.forEach(function(r,i){
+        table+='<tr><td>'+r.id+'</td><td>'+(r.title||'-')+'</td><td>'+(r.category||'-')+'</td><td>'+(r.file_size||'-')+'</td></tr>';
+      });
+      table+='</table>';
+    }else if(id==='notices'){
+      table='<table class="admin-table"><tr><th>ID</th><th>Title</th><th>Priority</th><th>Date</th></tr>';
+      data.forEach(function(r,i){
+        table+='<tr><td>'+r.id+'</td><td>'+(r.title||'-')+'</td><td>'+(r.priority||'normal')+'</td><td>'+(r.created_at?r.created_at.slice(0,10):'-')+'</td></tr>';
+      });
+      table+='</table>';
+    }
+    el.innerHTML=table;
+  }catch(e){
+    el.innerHTML='<p style="color:#c62828;">Error loading data. Make sure you are logged in.</p>';
+  }
+}
 
-  <section class="page-banner">
-    <div class="container">
-      <h1>Admin Dashboard</h1>
-      <p>View and manage student registrations</p>
-    </div>
-  </section>
+async function loadDeptDropdown(){
+  try{
+    var depts=await API.get('/departments');
+    var sel=document.getElementById('tDept');
+    if(sel) depts.forEach(function(d){sel.innerHTML+='<option value="'+d.id+'">'+d.name+'</option>';});
+  }catch(e){}
+}
 
-  <section class="section">
-    <div class="container">
+async function registerTeacher(){
+  var msg=document.getElementById('tMsg');
+  msg.innerHTML='<i class="fas fa-spinner fa-spin"></i>';
+  try{
+    var r=await API.post('/auth/register/teacher',{
+      name: document.getElementById('tName').value,
+      email: document.getElementById('tEmail').value,
+      password: document.getElementById('tPass').value,
+      department_id: document.getElementById('tDept').value || null,
+      qualification: document.getElementById('tQual').value || null,
+      phone: document.getElementById('tPhone').value || null
+    });
+    if(r.success){msg.innerHTML='<span style="color:green;">Teacher registered successfully!</span>';loadSection('teachers');}
+    else msg.innerHTML='<span style="color:red;">Error: '+(r.error||'Unknown')+'</span>';
+  }catch(e){msg.innerHTML='<span style="color:red;">Error: '+(e.error||e.message||'Failed')+'</span>';}
+}
 
-      <div id="loginBox" class="admin-login">
-        <div class="admin-login-card">
-          <span style="font-size:3rem;display:block;text-align:center;margin-bottom:10px">&#128274;</span>
-          <h3 style="text-align:center;color:var(--navy);margin-bottom:15px">Admin Login</h3>
-          <div class="form-group">
-            <input type="password" id="adminPass" placeholder="Enter admin password">
-          </div>
-          <button class="btn btn-primary" style="width:100%" onclick="adminLogin()">Login</button>
-          <p style="text-align:center;margin-top:10px;font-size:0.8rem;color:var(--text-light)">Default password: <strong>cdlu@2026</strong></p>
-        </div>
-      </div>
-
-      <div id="adminPanel" class="admin-panel" style="display:none">
-        <div class="admin-stats-bar">
-          <div class="admin-stat-card">
-            <span class="admin-stat-num" id="totalCount">0</span>
-            <span>Total Registrations</span>
-          </div>
-          <div class="admin-stat-card">
-            <span class="admin-stat-num" id="todayCount">0</span>
-            <span>Today's Registrations</span>
-          </div>
-          <div class="admin-stat-card">
-            <span class="admin-stat-num" id="pendingCount">0</span>
-            <span>Total Students</span>
-          </div>
-        </div>
-
-        <div class="admin-toolbar">
-          <input type="text" id="searchInput" placeholder="Search by name, phone or ID..." onkeyup="filterRegistrations()">
-          <div class="admin-toolbar-btns">
-            <button class="btn btn-primary" onclick="exportCSV()">Download CSV</button>
-            <button class="btn btn-primary" onclick="exportJSON()">Download JSON</button>
-            <button class="btn btn-primary" onclick="printReport()" style="background:var(--navy);color:var(--white)">Print Report</button>
-            <button class="btn btn-primary" onclick="clearAllData()" style="background:#c0392b;color:var(--white)">Clear All</button>
-            <button class="btn btn-primary" onclick="adminLogout()" style="background:#666">Logout</button>
-          </div>
-        </div>
-
-        <div style="overflow-x:auto">
-          <table class="admin-table" id="regTable">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Reg ID</th>
-                <th>Name</th>
-                <th>Father's Name</th>
-                <th>DOB</th>
-                <th>Gender</th>
-                <th>Category</th>
-                <th>Phone</th>
-                <th>Email</th>
-                <th>Programme</th>
-                <th>Qualification</th>
-                <th>Percentage</th>
-                <th>Registered On</th>
-              </tr>
-            </thead>
-            <tbody id="regBody"></tbody>
-          </table>
-        </div>
-
-        <p id="noDataMsg" style="text-align:center;padding:40px;color:var(--text-light);display:none">No registrations found.</p>
-      </div>
-
-    </div>
-  </section>
-
-  <footer class="footer">
-    <div class="container">
-      <div class="footer-grid">
-        <div class="footer-about">
-          <h3><span class="logo-icon" style="width:36px;height:36px;font-size:0.55rem;">CDLU</span> Chaudhary Devi Lal University</h3>
-          <p>Admin Panel for managing student registrations.</p>
-        </div>
-        <div>
-          <h4>Quick Links</h4>
-          <ul class="footer-links">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="registration.html">Registration</a></li>
-            <li><a href="admin.html">Admin Panel</a></li>
-          </ul>
-        </div>
-        <div>
-          <h4>Contact</h4>
-          <ul class="footer-links">
-            <li>Barnala Road, Sirsa</li>
-            <li>Haryana - 125055, India</li>
-            <li>01666-247049</li>
-          </ul>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <p>&copy; 2026 Chaudhary Devi Lal University, Sirsa. All rights reserved.</p>
-      </div>
-    </div>
-  </footer>
-
-  <script src="js/api.js"></script>
-  <script src="js/auth.js"></script>
-  <script src="js/script.js"></script>
-  <script src="js/admin.js"></script>
-</body>
-</html>
+document.addEventListener("DOMContentLoaded",function(){
+  var user=requireAuth(["admin"]);
+  if(!user)return;
+  var el=document.getElementById("userInfo");
+  if(el)el.innerHTML='<i class="fas fa-user-shield"></i> Admin';
+  document.querySelectorAll('#adminCards .card').forEach(function(c){
+    c.style.cursor='pointer';
+    c.addEventListener('click',function(){showSection(this.getAttribute('data-section'));});
+  });
+});
+</script>
+</body></html>

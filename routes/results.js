@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../config/db');
+const { optionalAuth, teacherAuth } = require('../middleware/auth');
 
 function calculateGrade(marks, maxMarks) {
   const pct = (marks / maxMarks) * 100;
@@ -13,9 +14,13 @@ function calculateGrade(marks, maxMarks) {
   return 'F';
 }
 
-router.get('/', async (req, res) => {
+router.get('/', optionalAuth, async (req, res) => {
   try {
-    const { courseId, semester, studentId } = req.query;
+    let { courseId, semester, studentId } = req.query;
+    // Student can only see their own results
+    if (req.user && req.user.role === 'student') {
+      studentId = req.user.id;
+    }
     let sql = `SELECT r.*, s.name as student_name, s.reg_id, c.name as course_name, c.code as course_code
                FROM results r
                JOIN students s ON r.student_id = s.id
@@ -34,11 +39,19 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.post('/', async (req, res) => {
+router.post('/', teacherAuth, async (req, res) => {
   try {
     const { studentId, courseId, semester, examType, marksObtained, maxMarks, enteredBy } = req.body;
     if (!studentId || !courseId || !examType || marksObtained === undefined) {
       return res.status(400).json({ error: 'Student, course, exam type and marks required' });
+    }
+    const [courseCheck] = await db.query('SELECT id FROM courses WHERE id = ?', [courseId]);
+    if (courseCheck.length === 0) {
+      return res.status(400).json({ error: 'Course not found' });
+    }
+    const [studentCheck] = await db.query('SELECT id FROM students WHERE id = ?', [studentId]);
+    if (studentCheck.length === 0) {
+      return res.status(400).json({ error: 'Student not found' });
     }
     const maxM = parseFloat(maxMarks) || 100;
     const marks = parseFloat(marksObtained);
@@ -61,14 +74,20 @@ router.post('/', async (req, res) => {
     );
     res.json({ success: true, id: result.insertId, grade });
   } catch (err) {
-    console.error('Error adding result:', err);
-    res.status(500).json({ error: 'Server error' });
+    console.error('Error adding result:', err.message, err.sqlMessage);
+    res.status(500).json({ error: err.sqlMessage || err.message });
   }
 });
 
-router.get('/student/:studentId', async (req, res) => {
+router.get('/student/:studentId', optionalAuth, async (req, res) => {
   try {
     const { semester } = req.query;
+    // Student can only view their own results
+    if (req.user && req.user.role === 'student') {
+      if (parseInt(req.params.studentId) !== req.user.id) {
+        return res.status(403).json({ error: 'You can only view your own results' });
+      }
+    }
     let sql = `SELECT r.*, c.name as course_name, c.code as course_code, c.credits
                FROM results r
                JOIN courses c ON r.course_id = c.id
